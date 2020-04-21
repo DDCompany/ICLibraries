@@ -27,6 +27,24 @@ module.exports = function (grunt) {
 `;
     }
 
+    function getAchievementsAPIBanner() {
+        return `/*
+        _        _     _                                     _          _    ____ ___
+       / \\   ___| |__ (_) _____   _____ _ __ ___   ___ _ __ | |_ ___   / \\  |  _ \\_ _|
+      / _ \\ / __| '_ \\| |/ _ \\ \\ / / _ \\ '_ \` _ \\ / _ \\ '_ \\| __/ __| / _ \\ | |_) | |
+     / ___ \\ (__| | | | |  __/\\ V /  __/ | | | | |  __/ | | | |_\\__ \\/ ___ \\|  __/| |
+    /_/   \\_\\___|_| |_|_|\\___| \\_/ \\___|_| |_| |_|\\___|_| |_|\\__|___/_/   \\_\\_|  |___|
+
+    AchievementsAPI library
+     
+    ${TERMS_OF_USE}
+             
+    ${COPYRIGHT}
+*/
+
+`;
+    }
+
     grunt.initConfig({
         concat: {
             guideAPI: {
@@ -40,10 +58,24 @@ module.exports = function (grunt) {
                     'raw/guide-api/PageControllers.js',
                 ],
                 dest: 'libs/GuideAPI.js',
+            },
+
+            achievementsAPI: {
+                options: {
+                    banner: getAchievementsAPIBanner(),
+                },
+                src: [
+                    'raw/achievements-api/header.js',
+                    'raw/achievements-api/AchievementAPI.js',
+                    'raw/achievements-api/AchievementPopup.js',
+                    'raw/achievements-api/commands.js',
+                ],
+                dest: 'libs/AchievementsAPI.js',
             }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.registerTask('guide-api', ['concat:guideAPI']);
+    grunt.registerTask('achievements-api', ['concat:achievementsAPI']);
 };
