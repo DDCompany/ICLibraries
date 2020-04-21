@@ -68,6 +68,7 @@ module.exports = function (grunt) {
                     'raw/achievements-api/header.js',
                     'raw/achievements-api/AchievementAPI.js',
                     'raw/achievements-api/AchievementPopup.js',
+                    'raw/achievements-api/translation.js',
                     'raw/achievements-api/commands.js',
                 ],
                 dest: 'libs/AchievementsAPI.js',
