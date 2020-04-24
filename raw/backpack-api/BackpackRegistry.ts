@@ -29,7 +29,7 @@ class BackpackRegistry {
         }
 
         prototype.title = prototype.title ?? "Backpack";
-        prototype.items = prototype.items ?? [];
+        prototype.kind = prototype.kind ?? BackpackKind.META;
         prototype.slots = prototype.slots ?? 10;
         prototype.inRow = prototype.inRow ?? prototype.slots;
         prototype.slotsCenter = prototype.slotsCenter ?? true;
@@ -69,11 +69,11 @@ class BackpackRegistry {
         }
 
         Item.registerUseFunctionForID(id, function (coords, item) {
-            BackpackRegistry.openGuiFor(item.id, item.data);
+            BackpackRegistry.openGuiFor(item);
         });
 
         Item.registerNoTargetUseFunction(id, function (item) {
-            BackpackRegistry.openGuiFor(item.id, item.data);
+            BackpackRegistry.openGuiFor(item);
         });
 
         this.prototypes[id] = prototype;
@@ -137,25 +137,44 @@ class BackpackRegistry {
 
     /**
      * Open backpack gui.
-     * @param id - backpack id
-     * @param data - backpack data
+     * @param item - item
      * @param notUpdateData - If false and no container has been created for the passed data, a new item will be set
      * in the player’s hand
      * @returns backpack data. Can return a value other than passed one.
      */
-    static openGuiFor(id: number, data: number, notUpdateData?: boolean): number | null {
-        let prototype = this.prototypes[id];
+    static openGuiFor(item: ItemInstance, notUpdateData?: boolean): number | null {
+        let prototype = this.prototypes[item.id];
 
         if (prototype) {
-            if (!data) {
-                data = BackpackRegistry.nextUnique++;
-                if (!notUpdateData)
-                    Player.setCarriedItem(id, 1, data);
+            let key: string;
+            switch (prototype.kind) {
+                case BackpackKind.META:
+                    if (!item.data) {
+                        item.data = BackpackRegistry.nextUnique++;
+                        if (!notUpdateData)
+                            Player.setCarriedItem(item.id, item.count, item.data);
+                    }
+
+                    key = "d" + item.data;
+                    break;
+                case BackpackKind.EXTRA:
+                    if (!item.extra) {
+                        item.extra = new ItemExtraData();
+                    }
+
+                    let data = (item.extra as ItemExtra).getInt("__backpack_id", -1);
+                    if (data === -1) {
+                        data = BackpackRegistry.nextUnique++;
+                        (item.extra as ItemExtra).putInt("__backpack_id", data);
+                        if (!notUpdateData)
+                            Player.setCarriedItem(item.id, item.count, item.data, item.extra);
+                    }
+
+                    key = "d" + data;
+                    break;
             }
 
-            let key = "d" + data;
             let container = this.containers[key];
-
             if (!container) {
                 container = new UI.Container();
                 this.containers[key] = container;
@@ -167,7 +186,7 @@ class BackpackRegistry {
                 header.contentProvider.drawing[1].text = Translation.translate(prototype.title);
             }
             container.openAs(gui);
-            return data;
+            return item.data;
         }
 
         Logger.Log("item is not a backpack", "ERROR");

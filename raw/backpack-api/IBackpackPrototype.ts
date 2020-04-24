@@ -1,9 +1,21 @@
+enum BackpackKind {
+    EXTRA = "extra",
+    META = "meta"
+}
+
+EXPORT("BackpackKind", BackpackKind);
+
 type T_ValidationFunc = (id: number, count: number, data: number) => boolean;
 
 /**
  * Object representing properties of the backpack
  */
 interface IBackpackPrototype {
+    /**
+     * Specify where backpack id is stored.
+     * @default <i>BackpackKind.META</i>
+     */
+    kind?: BackpackKind
     /**
      * Backpack title.
      */
@@ -37,7 +49,7 @@ interface IBackpackPrototype {
      */
     isValidItem?: T_ValidationFunc;
     /**
-     * GUI of the backpack. If specified other properties are ignored.
+     * GUI of the backpack.
      */
     gui?: UI.Window | UI.WindowGroup
 }

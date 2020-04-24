@@ -32,10 +32,11 @@ Item.setGlint(ItemID.backpackTest2, true);
 setNameWithData(ItemID.backpackTest2);
 
 BackpackRegistry.register(ItemID.backpackTest2, {
+    //Any item, because 'items' is undefined
+    kind: BackpackKind.EXTRA,
     slots: 3,
     slotsCenter: true,
-    inRow: 1,
-    items: [".*"] //Any item
+    inRow: 1
 });
 
 Translation.addTranslation("Test Backpack", {ru: "Тестовый Рюкзак"});
