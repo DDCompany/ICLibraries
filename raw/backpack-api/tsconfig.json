@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "outFile": "../../libs/BackpackAPI.js"
+  },
+  "files": [
+    "../../declarations/global.d.ts",
+    "banner.ts",
+    "header.ts",
+    "IBackpackObjectItem.ts",
+    "IBackpackPrototype.ts",
+    "translation.ts",
+    "saver.ts",
+    "BackpackRegistry.ts"
+  ]
+}

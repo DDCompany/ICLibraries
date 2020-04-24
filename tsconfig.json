@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "None",
+    "sourceMap": false,
+    "removeComments": false,
+    "target": "ES5",
+    "allowJs": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "lib": [
+      "ES5"
+    ]
+  }
+}

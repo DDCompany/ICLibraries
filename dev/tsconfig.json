@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig",
+  "compilerOptions": {
+    "declaration": false,
+    "outFile": "../main.js"
+  },
+  "include": [
+    "global.d.ts",
+    "backpack-api/**/*",
+    "guide-api/**/*"
+  ]
+}

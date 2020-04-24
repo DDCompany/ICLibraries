@@ -1,0 +1,1 @@
+Translation.addTranslation("Backpack", {ru: "Рюкзак"});

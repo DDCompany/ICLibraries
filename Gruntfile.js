@@ -45,6 +45,24 @@ module.exports = function (grunt) {
 `;
     }
 
+    function getBackpackAPIBanner() {
+        return `/*
+     ____             _                     _        _    ____ ___ 
+    | __ )  __ _  ___| | ___ __   __ _  ___| | __   / \\  |  _ \\_ _|
+    |  _ \\ / _\` |/ __| |/ / '_ \\ / _\` |/ __| |/ /  / _ \\ | |_) | | 
+    | |_) | (_| | (__|   <| |_) | (_| | (__|   <  / ___ \\|  __/| | 
+    |____/ \\__,_|\\___|_|\\_\\ .__/ \\__,_|\\___|_|\\_\\/_/   \\_\\_|  |___|
+                                         
+    BackpackAPI library
+     
+    ${TERMS_OF_USE}
+             
+    ${COPYRIGHT}
+*/
+
+`;
+    }
+
     grunt.initConfig({
         concat: {
             guideAPI: {
@@ -73,10 +91,41 @@ module.exports = function (grunt) {
                 ],
                 dest: 'libs/AchievementsAPI.js',
             }
+        },
+
+        ts: {
+            tests: {
+                tsconfig: "dev/tsconfig.json"
+            },
+
+            backpackAPI: {
+                tsconfig: "raw/backpack-api/tsconfig.json"
+            }
+        },
+
+        move: {
+            declarations: {
+                src: 'libs/*.d.ts',
+                dest: 'dev/declarations/'
+            }
+        },
+
+        "file-creator": {
+            backpackAPIBanner: {
+                "raw/backpack-api/banner.ts": function (fs, dist, done) {
+                    fs.writeSync(dist, getBackpackAPIBanner());
+                    done();
+                }
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-ts');
+    grunt.loadNpmTasks('grunt-move');
+    grunt.loadNpmTasks('grunt-file-creator');
     grunt.registerTask('guide-api', ['concat:guideAPI']);
     grunt.registerTask('achievements-api', ['concat:achievementsAPI']);
+    grunt.registerTask('backpack-api', ['file-creator:backpackAPIBanner', 'ts:backpackAPI', 'move:declarations']);
+    grunt.registerTask('tests', ['ts:tests']);
 };
