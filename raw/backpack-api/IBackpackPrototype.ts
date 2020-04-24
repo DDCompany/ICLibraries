@@ -12,6 +12,12 @@ type T_ValidationFunc = (id: number, count: number, data: number) => boolean;
  */
 interface IBackpackPrototype {
     /**
+     * For backward compatibility. Don't use it.
+     * @see kind
+     * @deprecated
+     */
+    useExtraData?: boolean
+    /**
      * Specify where backpack id is stored.
      * @default <i>BackpackKind.META</i>
      */

@@ -29,7 +29,7 @@ class BackpackRegistry {
         }
 
         prototype.title = prototype.title ?? "Backpack";
-        prototype.kind = prototype.kind ?? BackpackKind.META;
+        prototype.kind = prototype.useExtraData ? BackpackKind.EXTRA : (prototype.kind ?? BackpackKind.META);
         prototype.slots = prototype.slots ?? 10;
         prototype.inRow = prototype.inRow ?? prototype.slots;
         prototype.slotsCenter = prototype.slotsCenter ?? true;
@@ -147,6 +147,7 @@ class BackpackRegistry {
 
         if (prototype) {
             let key: string;
+            let container: UI.Container | undefined | null;
             switch (prototype.kind) {
                 case BackpackKind.META:
                     if (!item.data) {
@@ -156,13 +157,15 @@ class BackpackRegistry {
                     }
 
                     key = "d" + item.data;
+                    container = this.containers[key];
                     break;
                 case BackpackKind.EXTRA:
                     if (!item.extra) {
                         item.extra = new ItemExtraData();
                     }
 
-                    let data = (item.extra as ItemExtra).getInt("__backpack_id", -1);
+                    let data = (item.extra as ItemExtra).getInt("container", -1); //For backward compatibility
+                    data = data === -1 ? (item.extra as ItemExtra).getInt("__backpack_id", -1) : data;
                     if (data === -1) {
                         data = BackpackRegistry.nextUnique++;
                         (item.extra as ItemExtra).putInt("__backpack_id", data);
@@ -170,11 +173,15 @@ class BackpackRegistry {
                             Player.setCarriedItem(item.id, item.count, item.data, item.extra);
                     }
 
-                    key = "d" + data;
+                    key = "e" + data;
+                    container = this.containers[key];
+                    if (!container) { //For backward compatibility
+                        key = "d" + data;
+                        container = this.containers[key];
+                    }
                     break;
             }
 
-            let container = this.containers[key];
             if (!container) {
                 container = new UI.Container();
                 this.containers[key] = container;
