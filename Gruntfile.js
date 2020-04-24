@@ -1,4 +1,7 @@
 module.exports = function (grunt) {
+    const GUIDE_API = "raw/guide-api/";
+    const ACHIEVEMENTS_API = "raw/achievements-api/";
+    const BACKPACK_API = "raw/backpack-api/";
     const COPYRIGHT = "©DDCompany (https://vk.com/forestry_pe)";
     const TERMS_OF_USE = `Условия использования:
       - Запрещено распространение библиотеки на сторонних источниках
@@ -70,10 +73,10 @@ module.exports = function (grunt) {
                     banner: getGuideAPIBanner(),
                 },
                 src: [
-                    'raw/guide-api/header.js',
-                    'raw/guide-api/GuideAPI.js',
-                    'raw/guide-api/GuideHelper.js',
-                    'raw/guide-api/PageControllers.js',
+                    `${GUIDE_API}header.js`,
+                    `${GUIDE_API}GuideAPI.js`,
+                    `${GUIDE_API}GuideHelper.js`,
+                    `${GUIDE_API}PageControllers.js`,
                 ],
                 dest: 'libs/GuideAPI.js',
             },
@@ -83,11 +86,11 @@ module.exports = function (grunt) {
                     banner: getAchievementsAPIBanner(),
                 },
                 src: [
-                    'raw/achievements-api/header.js',
-                    'raw/achievements-api/AchievementAPI.js',
-                    'raw/achievements-api/AchievementPopup.js',
-                    'raw/achievements-api/translation.js',
-                    'raw/achievements-api/commands.js',
+                    `${ACHIEVEMENTS_API}header.js`,
+                    `${ACHIEVEMENTS_API}AchievementAPI.js`,
+                    `${ACHIEVEMENTS_API}AchievementPopup.js`,
+                    `${ACHIEVEMENTS_API}translation.js`,
+                    `${ACHIEVEMENTS_API}commands.js`,
                 ],
                 dest: 'libs/AchievementsAPI.js',
             }
@@ -99,7 +102,7 @@ module.exports = function (grunt) {
             },
 
             backpackAPI: {
-                tsconfig: "raw/backpack-api/tsconfig.json"
+                tsconfig: `${BACKPACK_API}tsconfig.json`
             }
         },
 
