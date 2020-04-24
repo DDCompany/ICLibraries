@@ -1,6 +1,6 @@
 LIBRARY({
     name: "BackpackAPI",
-    version: 5,
+    version: 6,
     shared: true,
     api: "CoreEngine",
 });
