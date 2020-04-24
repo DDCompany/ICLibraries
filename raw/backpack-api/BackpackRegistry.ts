@@ -187,12 +187,7 @@ class BackpackRegistry {
                 this.containers[key] = container;
             }
 
-            let gui = prototype.gui;
-            if ((gui as any).getWindow) {
-                let header = (gui as any).getWindow("header");
-                header.contentProvider.drawing[1].text = Translation.translate(prototype.title);
-            }
-            container.openAs(gui);
+            container.openAs(prototype.gui);
             return item.data;
         }
 
@@ -245,3 +240,21 @@ class BackpackRegistry {
 }
 
 EXPORT("BackpackRegistry", BackpackRegistry);
+
+Callback.addCallback("LevelLoaded", function () {
+    for (let id in BackpackRegistry.prototypes) {
+        let prototype = BackpackRegistry.prototypes[id];
+        if (!prototype.title) {
+            continue;
+        }
+
+        let gui = prototype.gui as any;
+        if (gui.getWindow) {
+            let header = gui.getWindow("header");
+            let drawing = header.contentProvider.drawing[1];
+            if (drawing) {
+                drawing.text = Translation.translate(prototype.title);
+            }
+        }
+    }
+});
