@@ -114,8 +114,8 @@ module.exports = function (grunt) {
         },
 
         "file-creator": {
-            backpackAPIBanner: {
-                "raw/backpack-api/banner.ts": function (fs, dist, done) {
+            generateBanners: {
+                [`${BACKPACK_API}banner.ts`]: function (fs, dist, done) {
                     fs.writeSync(dist, getBackpackAPIBanner());
                     done();
                 }
@@ -127,8 +127,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-move');
     grunt.loadNpmTasks('grunt-file-creator');
+    grunt.registerTask('generateBanners', ['file-creator:generateBanners']);
     grunt.registerTask('guide-api', ['concat:guideAPI']);
     grunt.registerTask('achievements-api', ['concat:achievementsAPI']);
-    grunt.registerTask('backpack-api', ['file-creator:backpackAPIBanner', 'ts:backpackAPI', 'move:declarations']);
+    grunt.registerTask('backpack-api', ['ts:backpackAPI', 'move:declarations']);
     grunt.registerTask('tests', ['ts:tests']);
 };
