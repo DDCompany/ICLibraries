@@ -251,7 +251,7 @@ Callback.addCallback("LevelLoaded", function () {
         if (gui.getWindow) {
             let header = gui.getWindow("header");
             if (header) {
-                let drawing = header.contentProvider.drawing[1];
+                let drawing = header.contentProvider.drawing[2];
                 if (drawing) {
                     drawing.text = Translation.translate(prototype.title);
                 }
