@@ -212,7 +212,7 @@ class BackpackRegistry {
      * @param inRow - Amount of slots in one row
      * @param center - Do the slots center?
      * @param x - Initial x coordinate. Ignored if the center argument is true
-     * @param y - Initial coordinate y.
+     * @param y - Initial y coordinate.
      * @returns gui.
      */
     static addSlotsToGui(gui: UI.Window | UI.WindowGroup,
@@ -223,7 +223,6 @@ class BackpackRegistry {
                          x = 345,
                          y = 70) {
         let content = gui.getContent();
-
         x = center ? 300 + (700 - inRow * 61) / 2 : x;
 
         for (let i = 0; i < slots; i++) {
