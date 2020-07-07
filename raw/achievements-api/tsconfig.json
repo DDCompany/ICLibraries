@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "outFile": "../../libs/AchievementsAPI.js"
+  },
+  "files": [
+    "../../declarations/global.d.ts",
+    "banner.ts",
+    "ITranslatable.ts",
+    "popup/IAchievementPopup.ts",
+    "popup/AchievementPopup.ts",
+    "achievements/AchievementType.ts",
+    "achievements/IAchievementParent.ts",
+    "achievements/IAchievementData.ts",
+    "achievements/IAchievement.ts",
+    "achievements/IAchievementGroup.ts",
+    "achievements/AchievementsAPI.ts",
+    "achievements/saver.ts",
+    "commands.ts",
+    "translation.ts"
+  ]
+}

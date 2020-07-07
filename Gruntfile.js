@@ -79,20 +79,6 @@ module.exports = function (grunt) {
                     `${GUIDE_API}PageControllers.js`,
                 ],
                 dest: 'libs/GuideAPI.js',
-            },
-
-            achievementsAPI: {
-                options: {
-                    banner: getAchievementsAPIBanner(),
-                },
-                src: [
-                    `${ACHIEVEMENTS_API}header.js`,
-                    `${ACHIEVEMENTS_API}AchievementAPI.js`,
-                    `${ACHIEVEMENTS_API}AchievementPopup.js`,
-                    `${ACHIEVEMENTS_API}translation.js`,
-                    `${ACHIEVEMENTS_API}commands.js`,
-                ],
-                dest: 'libs/AchievementsAPI.js',
             }
         },
 
@@ -103,6 +89,10 @@ module.exports = function (grunt) {
 
             backpackAPI: {
                 tsconfig: `${BACKPACK_API}tsconfig.json`
+            },
+
+            achievementsAPI: {
+                tsconfig: `${ACHIEVEMENTS_API}tsconfig.json`
             }
         },
 
@@ -118,6 +108,11 @@ module.exports = function (grunt) {
                 [`${BACKPACK_API}banner.ts`]: function (fs, dist, done) {
                     fs.writeSync(dist, getBackpackAPIBanner());
                     done();
+                },
+
+                [`${ACHIEVEMENTS_API}banner.ts`]: function (fs, dist, done) {
+                    fs.writeSync(dist, getAchievementsAPIBanner());
+                    done();
                 }
             }
         }
@@ -129,7 +124,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-file-creator');
     grunt.registerTask('generateBanners', ['file-creator:generateBanners']);
     grunt.registerTask('guide-api', ['concat:guideAPI']);
-    grunt.registerTask('achievements-api', ['concat:achievementsAPI']);
+    grunt.registerTask('achievements-api', ['ts:achievementsAPI', 'move:declarations']);
     grunt.registerTask('backpack-api', ['ts:backpackAPI', 'move:declarations']);
     grunt.registerTask('tests', ['ts:tests']);
 };
