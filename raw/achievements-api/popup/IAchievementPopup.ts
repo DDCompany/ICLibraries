@@ -26,7 +26,7 @@ interface IAchievementPopup {
 
     /**
      * Time in ticks that popup will be on the screen
-     * @default <i>AchievementsAPI.DEFAULT_DELAY</i>
+     * @default <i>AchievementAPI.DEFAULT_DELAY</i>
      */
     delay?: number
 }

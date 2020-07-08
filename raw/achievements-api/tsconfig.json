@@ -6,6 +6,7 @@
   "files": [
     "../../declarations/global.d.ts",
     "banner.ts",
+    "header.ts",
     "ITranslatable.ts",
     "popup/IAchievementPopup.ts",
     "popup/AchievementPopup.ts",
@@ -14,7 +15,9 @@
     "achievements/IAchievementData.ts",
     "achievements/IAchievement.ts",
     "achievements/IAchievementGroup.ts",
-    "achievements/AchievementsAPI.ts",
+    "achievements/AchievementGroup.ts",
+    "achievements/Achievement.ts",
+    "achievements/AchievementAPI.ts",
     "achievements/saver.ts",
     "commands.ts",
     "translation.ts"

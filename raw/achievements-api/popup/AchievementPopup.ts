@@ -131,4 +131,4 @@ Callback.addCallback("tick", function () {
     }
 });
 
-EXPORT("AchievementsPopup", AchievementPopup);
+EXPORT("AchievementPopup", AchievementPopup);

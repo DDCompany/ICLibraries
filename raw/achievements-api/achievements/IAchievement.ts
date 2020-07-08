@@ -54,8 +54,8 @@ interface IAchievement {
     type?: AchievementType | string;
 
     /**
-     * Max progress. When calling method <i>AchievementsAPI.give</i>, the special counter will increased by one until
-     * the maximum value is equal, after which the achievement will be completed. Use <i>AchievementsAPI.getData().progress</i>
+     * Max progress. When calling method <i>AchievementAPI.give</i>, the special counter will increased by one until
+     * the maximum value is equal, after which the achievement will be completed. Use <i>AchievementAPI.getData().progress</i>
      * to get current progress value
      */
     progressMax?: number;

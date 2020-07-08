@@ -39,9 +39,4 @@ interface IAchievementGroup {
      * Group icon
      */
     icon?: { id?: number, data?: number }
-
-    /**
-     * Achievements
-     */
-    list?: { [key: string]: IAchievement }
 }

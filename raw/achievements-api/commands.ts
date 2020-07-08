@@ -5,20 +5,20 @@ Callback.addCallback("NativeCommand", function (str: string) {
     if (parts[0] === "ach" || parts[0] === "achievement") {
         switch (parts[1]) {
             case "giveAll":
-                AchievementsAPI.giveAll();
-                Game.message("[AchievementsAPI] All achievements was gave");
+                AchievementAPI.giveAll();
+                Game.message("[AchievementAPI] All achievements was gave");
                 Game.prevent();
                 return;
             case "give":
-                if (!parts[2] || !AchievementsAPI.giveAllForGroup(AchievementsAPI.groups[parts[2]]))
+                if (!parts[2] || !AchievementAPI.giveAllForGroup(AchievementAPI.groups[parts[2]].getDescription()))
                     return;
 
-                Game.message("[AchievementsAPI] Achievements was gave!");
+                Game.message("[AchievementAPI] Achievements was gave!");
                 Game.prevent();
                 return;
             case "consumeAll":
-                AchievementsAPI.completed = {};
-                Game.message("[AchievementsAPI] All achievements was consumed");
+                AchievementAPI.resetAll();
+                Game.message("[AchievementAPI] All achievements was consumed");
                 Game.prevent();
         }
     }
