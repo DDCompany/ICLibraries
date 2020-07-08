@@ -72,6 +72,7 @@ class Achievement {
 
         this.completed = true;
         Callback.invokeCallback("onAchieve", this.group.getDescription(), this.getDescription());
+        Callback.invokeCallback("onAchievementCompleted", this);
     }
 
     reset() {
