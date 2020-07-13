@@ -163,6 +163,10 @@ class Achievement {
         return this.group;
     }
 
+    getData() {
+        return this.data.data;
+    }
+
     setCompleted(value: boolean) {
         this.completed = value;
     }
