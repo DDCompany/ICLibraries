@@ -36,7 +36,7 @@ Saver.addSavesScope("AchievementsScope",
                     data = newSaves[parts[0]] = {};
                 }
 
-                data[parts[1]] = {completed: saves.completed[key], data: {progress: 0, data: {}}}
+                data[parts[1]] = {completed: saves.completed[key], data: {progress: 0, data: {}}};
             }
 
             for (let key in saves.data) {
@@ -48,7 +48,7 @@ Saver.addSavesScope("AchievementsScope",
 
                 let data2 = data[parts[1]];
                 if (!data2) {
-                    data2 = data[parts[1]] = {completed: false, data: saves.data[key]}
+                    data2 = data[parts[1]] = {completed: false, data: saves.data[key]};
                 } else {
                     data2.data = saves.data[key];
                 }
@@ -67,13 +67,13 @@ Saver.addSavesScope("AchievementsScope",
                     if (child) {
                         child.setCompleted(saved.completed);
                         child.setData(saved.data);
-                        alert(`Read ${group.getUid()} ${child.getUid()}`)
+                        alert(`Read ${group.getUid()} ${child.getUid()}`);
                     } else {
-                        Logger.Log(`Achievement with uid '${key}' not found. Skipping...`, "WARNING")
+                        Logger.Log(`Achievement with uid '${key}' not found. Skipping...`, "WARNING");
                     }
                 }
             } else {
-                Logger.Log(`Group with uid '${groupKey}' not found. Skipping...`, "WARNING")
+                Logger.Log(`Group with uid '${groupKey}' not found. Skipping...`, "WARNING");
             }
         }
     },
@@ -89,7 +89,7 @@ Saver.addSavesScope("AchievementsScope",
                 _data[key] = {
                     completed: child.isCompleted(),
                     data: child.getFullData()
-                }
+                };
             }
             data[groupKey] = _data;
         }

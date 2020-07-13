@@ -125,7 +125,7 @@ class AchievementAPI {
                 }
             }
         }
-    })
+    });
     /**
      * Window with button that open achievements window
      */
@@ -170,7 +170,7 @@ class AchievementAPI {
         const group = new AchievementGroup(description);
 
         if (this.groups[group.getUid()]) {
-            throw new IllegalArgumentException(`Group with uid "$\{uid}" already registered`)
+            throw new IllegalArgumentException(`Group with uid "$\{uid}" already registered`);
         }
 
         this.groups[group.getUid()] = group;
@@ -185,16 +185,18 @@ class AchievementAPI {
     static register(uid: string, description: IAchievement) {
         const group = this.groups[uid];
         if (!group) {
-            throw new IllegalArgumentException("Invalid group uid")
+            throw new IllegalArgumentException("Invalid group uid");
         }
 
         const parent = description.parent;
-        if (parent && !parent.groupUnique)
+        if (parent && !parent.groupUnique) {
             parent.groupUnique = uid;
+        }
 
         group.addChildren(new Achievement(group, description));
     }
 
+    //noinspection JSUnusedGlobalSymbols
     /**
      * Load groups and achievements from JSON file
      * @param path - path to JSON
@@ -207,16 +209,18 @@ class AchievementAPI {
 
             let groups = parsed.groups;
             if (groups) {
-                for (let key in groups)
+                for (let key in groups) {
                     AchievementAPI.registerGroup(groups[key]);
+                }
             }
 
             let achievements = parsed.achievements;
             if (achievements) {
                 for (let key in achievements) {
                     let achievementGroup = achievements[key];
-                    for (let key2 in achievementGroup)
+                    for (let key2 in achievementGroup) {
                         AchievementAPI.register(key, achievementGroup[key2]);
+                    }
                 }
             }
 
@@ -252,8 +256,9 @@ class AchievementAPI {
             let parent = achievement.getParent();
 
             if (parent) {
-                if (!parent.isCompleted() && achievement.isStrongDependence())
+                if (!parent.isCompleted() && achievement.isStrongDependence()) {
                     continue;
+                }
             }
             contentExist = true;
 
@@ -288,6 +293,7 @@ class AchievementAPI {
 
     static initConditionsForWindow(group: AchievementGroup, size: number, elements: UIElementSet) {
         let halfOfSize = size / 2;
+        //noinspection JSUnusedGlobalSymbols
         elements["lines"] = {
             type: "custom",
             z: -1,
@@ -352,15 +358,17 @@ class AchievementAPI {
     }
 
     static initBackgroundForWindow(drawing: DrawingElement[], bgTexture: string) {
+        //noinspection JSUnusedGlobalSymbols
         drawing.push({
             type: "custom",
 
             func: function (canvas: android.graphics.Canvas) {
-                this.onDraw(canvas)
+                this.onDraw(canvas);
             },
 
             onDraw: function (canvas: android.graphics.Canvas) {
-                let textureBitmap = android.graphics.Bitmap.createScaledBitmap(UI.TextureSource.get(bgTexture), 50, 50, false);
+                let textureBitmap = android.graphics.Bitmap.createScaledBitmap(UI.TextureSource.get(bgTexture), 50, 50,
+                    false);
 
                 for (let i = 0; i <= canvas.getWidth() / 50; i++) {
                     for (let k = 0; k <= canvas.getHeight() / 50; k++) {
@@ -375,10 +383,11 @@ class AchievementAPI {
      * Open achievement window
      */
     static openAchievementsWindow() {
-        if (this.currentIndex < 0)
+        if (this.currentIndex < 0) {
             this.currentIndex = this.groupsAmount - 1;
-        else if (this.currentIndex >= this.groupsAmount)
+        } else if (this.currentIndex >= this.groupsAmount) {
             this.currentIndex = 0;
+        }
 
         let group = this.groups[this.groupNames[AchievementAPI.currentIndex]];
         let width = group.getWidth() || 600;
@@ -394,15 +403,17 @@ class AchievementAPI {
         if (contentExist) {
             this.initConditionsForWindow(group, size, elements);
 
-            if (group.getBgTextureName())
+            if (group.getBgTextureName()) {
                 this.initBackgroundForWindow(drawing, group.getBgTextureName());
+            }
         } else {
             width = 432;
             height = 260;
 
             let translated = Translation.translate("achievementApi.nothing");
-            if (translated === "achievementApi.nothing")
+            if (translated === "achievementApi.nothing") {
                 translated = "Nothing to Show :(";
+            }
 
             elements["nothing"] = {
                 type: "text",
@@ -438,6 +449,7 @@ class AchievementAPI {
         }
     }
 
+    //noinspection JSUnusedGlobalSymbols
     /**
      * @param groupUID - group identifier in which achievement contains
      * @param uid - achievement identifier
@@ -449,7 +461,7 @@ class AchievementAPI {
             throw new IllegalArgumentException(`Group with uid '${groupUID}' not found`);
         }
 
-        let achievement = group.getChild(uid)
+        let achievement = group.getChild(uid);
         if (!achievement) {
             throw new IllegalArgumentException(`Achievement with uid '${groupUID}' not found`);
         }
@@ -472,7 +484,7 @@ class AchievementAPI {
      * @returns Is the achievement completed?
      */
     static isCompleted(groupUID: string, uid: string): boolean {
-        return this.groups[groupUID].getChild(uid).isCompleted()
+        return this.groups[groupUID].getChild(uid).isCompleted();
     }
 
     /**
@@ -483,7 +495,7 @@ class AchievementAPI {
     static give(groupUID: string, uid: string) {
         const group = this.groups[groupUID];
         if (!group) {
-            throw new IllegalArgumentException(`Group with uid '${groupUID}' not found`)
+            throw new IllegalArgumentException(`Group with uid '${groupUID}' not found`);
         }
         group.give(uid);
     }
@@ -539,13 +551,14 @@ class AchievementAPI {
         return achievement.x || achievement.column * (size + 10);
     }
 
+    //noinspection JSUnusedGlobalSymbols
     /**
      * @deprecated
      */
     static getAchievementTexture(groupDesc: IAchievementGroup, achievement: IAchievement): string {
         const group = this.groups[groupDesc.unique];
         if (!group) {
-            throw new IllegalArgumentException("Invalid group uid")
+            throw new IllegalArgumentException("Invalid group uid");
         }
 
         const child = group.getChild(achievement.unique);
@@ -562,7 +575,7 @@ class AchievementAPI {
     static getData(groupUID: string, uid: string): IAchievementData {
         const group = this.groups[groupUID];
         if (!group) {
-            throw new IllegalArgumentException("Invalid group uid")
+            throw new IllegalArgumentException("Invalid group uid");
         }
 
         const child = group.getChild(uid);
@@ -573,6 +586,7 @@ class AchievementAPI {
         return child.getFullData();
     }
 
+    //noinspection JSUnusedGlobalSymbols
     /**
      * @deprecated
      */
@@ -603,6 +617,7 @@ class AchievementAPI {
         return true;
     }
 
+    //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
     /**
      * @deprecated
      */
@@ -623,9 +638,11 @@ Callback.addCallback("PostLoaded", function () {
     AchievementAPI.groupNames = Object.keys(AchievementAPI.groups);
 });
 Callback.addCallback("NativeGuiChanged", function (screenName: string) {
-    if (screenName === "hud_screen" || screenName === "in_game_play_screen")
+    if (screenName === "hud_screen" || screenName === "in_game_play_screen") {
         AchievementAPI.containerOverlay.openAs(AchievementAPI.groupsShowUI);
-    else AchievementAPI.containerOverlay.close();
+    } else {
+        AchievementAPI.containerOverlay.close();
+    }
 });
 Callback.addCallback("LevelLeft", function () {
     AchievementAPI.resetAll();

@@ -3,7 +3,7 @@ class AchievementGroup {
 
     constructor(private description: IAchievementGroup) {
         if (!description.unique) {
-            throw new IllegalArgumentException("Invalid uid")
+            throw new IllegalArgumentException("Invalid uid");
         }
     }
 

@@ -46,17 +46,17 @@ interface IAchievement {
     strongDependence?: boolean;
 
     /**
-     * Affects on the texture of frame and the popup title. To create custom, you need to create 'achievements_bg' folder
-     * in GUI resources directory and place the textures in it with the following suffixes: '_completed', '_locked' and
-     * 'unlocked'
+     * Affects on the texture of frame and the popup title. To create custom, you need to create 'achievements_bg'
+     * folder in GUI resources directory and place the textures in it with the following suffixes: '_completed',
+     * '_locked' and 'unlocked'
      * @default <i>AchievementType.default</i>
      */
     type?: AchievementType | string;
 
     /**
      * Max progress. When calling method <i>AchievementAPI.give</i>, the special counter will increased by one until
-     * the maximum value is equal, after which the achievement will be completed. Use <i>AchievementAPI.getData().progress</i>
-     * to get current progress value
+     * the maximum value is equal, after which the achievement will be completed. Use
+     * <i>AchievementAPI.getData().progress</i> to get current progress value
      */
     progressMax?: number;
 

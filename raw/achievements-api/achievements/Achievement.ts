@@ -1,6 +1,6 @@
 class Achievement {
     private completed = false;
-    private parent: Achievement | null = null;
+    private readonly parent: Achievement | null = null;
     private data = {
         progress: 0, //TODO: move to another field when AchievementAPI.getData will removed
         data: {}
@@ -17,12 +17,16 @@ class Achievement {
                 const otherGroup = AchievementAPI.groups[parent.groupUnique];
                 if (otherGroup) {
                     child = otherGroup.getChild(parent.unique);
-                } else throw new IllegalArgumentException("Parent not found: group uid is invalid");
+                } else {
+                    throw new IllegalArgumentException("Parent not found: group uid is invalid");
+                }
             }
 
             if (child) {
                 this.parent = child;
-            } else throw new IllegalArgumentException("Parent not found: achievement uid is invalid");
+            } else {
+                throw new IllegalArgumentException("Parent not found: achievement uid is invalid");
+            }
         }
     }
 
@@ -92,8 +96,9 @@ class Achievement {
         }
 
         let description = AchievementAPI.getLocalized(this.description, "description");
-        if (description)
+        if (description) {
             info += "\n" + description;
+        }
 
         alert(info);
     }
@@ -119,11 +124,13 @@ class Achievement {
     getTextureName() {
         let type;
 
-        if (this.isCompleted())
+        if (this.isCompleted()) {
             type = "completed";
-        else if (this.isUnlocked())
+        } else if (this.isUnlocked()) {
             type = "unlocked";
-        else type = "locked";
+        } else {
+            type = "locked";
+        }
 
         return "achievement_bg." + (this.description.type || "default") + "_" + type;
     }
@@ -144,10 +151,6 @@ class Achievement {
         return this.description;
     }
 
-    /**
-     * For backward capability. Don't use it
-     * @deprecated
-     */
     getFullData() {
         return this.data;
     }

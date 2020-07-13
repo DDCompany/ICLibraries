@@ -10,8 +10,9 @@ Callback.addCallback("NativeCommand", function (str: string) {
                 Game.prevent();
                 return;
             case "give":
-                if (!parts[2] || !AchievementAPI.giveAllForGroup(AchievementAPI.groups[parts[2]].getDescription()))
+                if (!parts[2] || !AchievementAPI.giveAllForGroup(AchievementAPI.groups[parts[2]].getDescription())) {
                     return;
+                }
 
                 Game.message("[AchievementAPI] Achievements was gave!");
                 Game.prevent();
