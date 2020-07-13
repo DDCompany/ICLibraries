@@ -24,7 +24,6 @@ Saver.addSavesScope("AchievementsScope",
         }
 
         if (isOldSaves) { //Convert old format to new one
-            alert("old saves detected");
             // @ts-ignore
             const saves = <{ completed: { [key: string]: boolean }, data: { [key: string]: IAchievementData } }>scope;
             const newSaves: IAchievementsSaver = {};
@@ -67,7 +66,6 @@ Saver.addSavesScope("AchievementsScope",
                     if (child) {
                         child.setCompleted(saved.completed);
                         child.setData(saved.data);
-                        alert(`Read ${group.getUid()} ${child.getUid()}`);
                     } else {
                         Logger.Log(`Achievement with uid '${key}' not found. Skipping...`, "WARNING");
                     }
@@ -94,7 +92,6 @@ Saver.addSavesScope("AchievementsScope",
             data[groupKey] = _data;
         }
 
-        alert("save");
         return data;
     }
 );

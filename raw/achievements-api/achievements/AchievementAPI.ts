@@ -326,7 +326,6 @@ class AchievementAPI {
 
                         let parentItem = group.getChild(parent.getUid());
                         if (parentItem) {
-                            alert("1");
                             let x = AchievementAPI.getAchievementX(achievement.getDescription(), size);
                             let y = AchievementAPI.getAchievementY(achievement.getDescription(), size);
                             let _x = (x + halfOfSize) * scale;
