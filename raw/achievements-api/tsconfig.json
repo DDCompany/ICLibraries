@@ -8,6 +8,7 @@
     "banner.ts",
     "header.ts",
     "ITranslatable.ts",
+    "translation.ts",
     "popup/IAchievementPopup.ts",
     "popup/AchievementPopup.ts",
     "achievements/AchievementType.ts",
@@ -19,7 +20,6 @@
     "achievements/Achievement.ts",
     "achievements/AchievementAPI.ts",
     "achievements/saver.ts",
-    "commands.ts",
-    "translation.ts"
+    "commands.ts"
   ]
 }
