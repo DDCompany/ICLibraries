@@ -49,7 +49,6 @@ class AchievementAPI {
             height: 370
         },
         drawing: [
-            {type: "color", color: android.graphics.Color.rgb(198, 198, 198)},
             {type: "frame", x: 0, y: 0, width: 1000, height: 725, bitmap: "achievements_frame", scale: 5},
             {
                 type: "text",
