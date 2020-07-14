@@ -1,8 +1,9 @@
-IMPORT("AchievementAPI");
+IMPORT("AchievementsAPI");
 
 AchievementAPI.registerGroup({
     unique: "test_group",
     name: "Test",
+    bgTexture: "groups_bg.end",
     icon: {
         id: VanillaBlockID.bedrock
     }

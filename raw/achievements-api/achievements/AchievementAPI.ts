@@ -1,5 +1,6 @@
 import UIElementSet = UI.UIElementSet;
 import DrawingElement = UI.DrawingElement;
+import TileMode = android.graphics.Shader.TileMode;
 
 class AchievementAPI {
     /**
@@ -362,14 +363,12 @@ class AchievementAPI {
             type: "custom",
 
             onDraw: function (canvas: android.graphics.Canvas) {
-                let textureBitmap = android.graphics.Bitmap.createScaledBitmap(UI.TextureSource.get(bgTexture), 50, 50,
+                let bitmap = android.graphics.Bitmap.createScaledBitmap(UI.TextureSource.get(bgTexture), 50, 50,
                     false);
-
-                for (let i = 0; i <= canvas.getWidth() / 50; i++) {
-                    for (let k = 0; k <= canvas.getHeight() / 50; k++) {
-                        canvas.drawBitmap(textureBitmap, i * 50, k * 50, null);
-                    }
-                }
+                let paint = new android.graphics.Paint();
+                paint.setShader(new android.graphics.BitmapShader(bitmap, TileMode.REPEAT, TileMode.REPEAT));
+                canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
+                bitmap.recycle();
             }
         });
     }
