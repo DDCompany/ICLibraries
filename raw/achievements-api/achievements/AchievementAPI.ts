@@ -361,10 +361,6 @@ class AchievementAPI {
         drawing.push({
             type: "custom",
 
-            func: function (canvas: android.graphics.Canvas) {
-                this.onDraw(canvas);
-            },
-
             onDraw: function (canvas: android.graphics.Canvas) {
                 let textureBitmap = android.graphics.Bitmap.createScaledBitmap(UI.TextureSource.get(bgTexture), 50, 50,
                     false);
