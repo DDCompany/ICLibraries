@@ -304,12 +304,10 @@ class AchievementAPI {
                 this.paint = new android.graphics.Paint();
                 this.paint.setColor(android.graphics.Color.WHITE);
                 this.paint.setStyle(android.graphics.Paint.Style.STROKE);
-                this.paint.setStrokeWidth(4);
 
                 this.paint2 = new android.graphics.Paint();
                 this.paint2.setColor(android.graphics.Color.BLACK);
                 this.paint2.setStyle(android.graphics.Paint.Style.STROKE);
-                this.paint2.setStrokeWidth(10);
             },
 
             onDraw: function (self: unknown, canvas: android.graphics.Canvas, scale: number) {
@@ -351,6 +349,9 @@ class AchievementAPI {
                     }
                 }
 
+                this.paint.setStrokeWidth(6 * scale);
+                this.paint2.setStrokeWidth(14 * scale);
+
                 canvas.drawPath(this.path, this.paint2);
                 canvas.drawPath(this.path, this.paint);
             }
@@ -362,8 +363,9 @@ class AchievementAPI {
         drawing.push({
             type: "custom",
 
-            onDraw: function (canvas: android.graphics.Canvas) {
-                let bitmap = android.graphics.Bitmap.createScaledBitmap(UI.TextureSource.get(bgTexture), 50, 50,
+            onDraw: function (canvas: android.graphics.Canvas, scale: number) {
+                let bitmap = android.graphics.Bitmap.createScaledBitmap(UI.TextureSource.get(bgTexture), 80 * scale,
+                    80 * scale,
                     false);
                 let paint = new android.graphics.Paint();
                 paint.setShader(new android.graphics.BitmapShader(bitmap, TileMode.REPEAT, TileMode.REPEAT));
