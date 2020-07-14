@@ -1,6 +1,6 @@
-IMPORT("AchievementsAPI");
+IMPORT("AchievementAPI");
 
-AchievementsAPI.registerGroup({
+AchievementAPI.registerGroup({
     unique: "test_group",
     name: "Test",
     icon: {
@@ -8,7 +8,7 @@ AchievementsAPI.registerGroup({
     }
 });
 
-AchievementsAPI.register("test_group", {
+AchievementAPI.register("test_group", {
     unique: "first",
     column: 0,
     row: 0,
@@ -21,7 +21,7 @@ AchievementsAPI.register("test_group", {
     }
 });
 
-AchievementsAPI.register("test_group", {
+AchievementAPI.register("test_group", {
     unique: "second",
     parent: {
         unique: "first"
@@ -37,7 +37,7 @@ AchievementsAPI.register("test_group", {
     }
 });
 
-AchievementsAPI.register("test_group", {
+AchievementAPI.register("test_group", {
     unique: "third",
     parent: {
         unique: "second"
@@ -55,18 +55,18 @@ AchievementsAPI.register("test_group", {
 });
 
 Callback.addCallback("ItemUse", function () {
-    if (!AchievementsAPI.isCompleted("test_group", "first")) {
-        AchievementsAPI.give("test_group", "first");
+    if (!AchievementAPI.isCompleted("test_group", "first")) {
+        AchievementAPI.give("test_group", "first");
         return;
     }
 
-    if (!AchievementsAPI.isCompleted("test_group", "second")) {
-        AchievementsAPI.give("test_group", "second");
+    if (!AchievementAPI.isCompleted("test_group", "second")) {
+        AchievementAPI.give("test_group", "second");
         return;
     }
 
-    if (!AchievementsAPI.isCompleted("test_group", "third")) {
-        AchievementsAPI.give("test_group", "third");
+    if (!AchievementAPI.isCompleted("test_group", "third")) {
+        AchievementAPI.give("test_group", "third");
         return;
     }
 });
