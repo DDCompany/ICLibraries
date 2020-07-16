@@ -166,7 +166,7 @@ class AchievementAPI {
      * Register new group
      * @param description - description object
      */
-    static registerGroup(description: IAchievementGroup) {
+    static registerGroup(description: IAchievementGroup): AchievementGroup {
         const group = new AchievementGroup(description);
 
         if (this.groups[group.getUid()]) {
@@ -175,6 +175,7 @@ class AchievementAPI {
 
         this.groups[group.getUid()] = group;
         this.groupsAmount++;
+        return group;
     }
 
     /**
@@ -182,7 +183,7 @@ class AchievementAPI {
      * @param uid - group unique identifier
      * @param description - description object
      */
-    static register(uid: string, description: IAchievement) {
+    static register(uid: string, description: IAchievement): Achievement {
         const group = this.groups[uid];
         if (!group) {
             throw new IllegalArgumentException("Invalid group uid");
@@ -193,7 +194,9 @@ class AchievementAPI {
             parent.groupUnique = uid;
         }
 
-        group.addChildren(new Achievement(group, description));
+        let achievement = new Achievement(group, description);
+        group.addChildren(achievement);
+        return achievement;
     }
 
     //noinspection JSUnusedGlobalSymbols
