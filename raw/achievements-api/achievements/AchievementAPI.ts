@@ -301,11 +301,11 @@ class AchievementAPI {
 
             onSetup: function () {
                 this.paint = new android.graphics.Paint();
-                this.paint.setColor(android.graphics.Color.WHITE);
+                this.paint.setARGB(255, 255, 255, 255);
                 this.paint.setStyle(android.graphics.Paint.Style.STROKE);
 
                 this.paint2 = new android.graphics.Paint();
-                this.paint2.setColor(android.graphics.Color.BLACK);
+                this.paint2.setARGB(255, 0, 0, 0);
                 this.paint2.setStyle(android.graphics.Paint.Style.STROKE);
             },
 
