@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "outFile": "../../libs/BaublesAPI.js"
+  },
+  "files": [
+    "../../declarations/global.d.ts",
+    "banner.ts",
+    "header.ts",
+    "ui.ts",
+    "api.ts",
+    "saves.ts"
+  ]
+}

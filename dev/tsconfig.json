@@ -8,6 +8,7 @@
     "global.d.ts",
     "backpack-api/**/*",
     "guide-api/**/*",
-    "achievements-api/**/*"
+    "achievements-api/**/*",
+    "baubles-api/**/*"
   ]
 }
