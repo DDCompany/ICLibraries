@@ -4,58 +4,6 @@ interface IAchievementsSaver {
 
 Saver.addSavesScope("AchievementsScope",
     function read(scope: IAchievementsSaver) {
-        //Detecting old saves //TODO: delete in next versions
-        let amount = 0;
-        let isOldSaves = true;
-        for (let key in scope) {
-            amount++;
-            if (amount > 2) {
-                isOldSaves = false;
-                break;
-            }
-
-            if (key != "completed" && key != "data") {
-                isOldSaves = false;
-                break;
-            }
-        }
-        if (isOldSaves) {
-            isOldSaves = amount == 2;
-        }
-
-        if (isOldSaves) { //Convert old format to new one
-            // @ts-ignore
-            const saves = <{ completed: { [key: string]: boolean }, data: { [key: string]: IAchievementData } }>scope;
-            const newSaves: IAchievementsSaver = {};
-
-            for (let key in saves.completed) {
-                const parts = key.split("_");
-                let data = newSaves[parts[0]];
-                if (!data) {
-                    data = newSaves[parts[0]] = {};
-                }
-
-                data[parts[1]] = {completed: saves.completed[key], data: {progress: 0, data: {}}};
-            }
-
-            for (let key in saves.data) {
-                const parts = key.split("_");
-                let data = newSaves[parts[0]];
-                if (!data) {
-                    data = newSaves[parts[0]] = {};
-                }
-
-                let data2 = data[parts[1]];
-                if (!data2) {
-                    data2 = data[parts[1]] = {completed: false, data: saves.data[key]};
-                } else {
-                    data2.data = saves.data[key];
-                }
-            }
-
-            scope = newSaves;
-        }
-
         for (let groupKey in scope) {
             const group = AchievementAPI.getGroup(groupKey);
             const data = scope[groupKey];
@@ -75,6 +23,7 @@ Saver.addSavesScope("AchievementsScope",
             }
         }
     },
+
     function save() {
         const data: IAchievementsSaver = {};
 
