@@ -1,3 +1,9 @@
+enum Connection {
+    NONE = "none",
+    VERTICAL = "vertical",
+    HORIZONTAL = "horizontal"
+}
+
 interface IAchievement {
     /**
      * Unique identifier
@@ -70,4 +76,12 @@ interface IAchievement {
      * Achievement icon
      */
     item?: { id: number, data?: number };
+
+    /**
+     * Specifies the sides to which the connection will be connected
+     * @default <i>Connection.HORIZONTAL</i>
+     */
+    connection?: Connection
 }
+
+EXPORT("Connection", Connection);

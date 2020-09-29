@@ -320,6 +320,10 @@ class AchievementAPI {
                         let achievement = group.getChild(index);
                         let parent = achievement.getParent();
 
+                        if (achievement.getDescription().connection === Connection.NONE) {
+                            continue;
+                        }
+
                         if (!parent || parent.getGroup().getUid() !== group.getUid() ||
                             (!parent.isCompleted() && achievement.isStrongDependence())) {
                             continue;
@@ -344,8 +348,19 @@ class AchievementAPI {
 
                                 this.path.moveTo(_x, _y);
                                 this.path.lineTo(x2, _y);
-                                this.path.lineTo(x2, _parentY);
-                                this.path.lineTo(_parentX, _parentY);
+
+                                switch (achievement.getDescription().connection) {
+                                    case Connection.HORIZONTAL:
+                                        this.path.lineTo(x2, _parentY);
+                                        this.path.lineTo(_parentX, _parentY);
+                                        break;
+                                    case Connection.VERTICAL:
+                                        this.path.lineTo(_parentX, _y);
+                                        this.path.lineTo(_parentX, _parentY);
+                                        break;
+                                    default:
+                                }
+
                             }
                         }
                     }

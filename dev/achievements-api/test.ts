@@ -10,25 +10,9 @@ AchievementAPI.registerGroup({
 });
 
 AchievementAPI.register("test_group", {
-    unique: "first",
-    column: 0,
-    row: 0,
-    name: {
-        text: "First",
-        translate: ""
-    },
-    item: {
-        id: VanillaItemID.apple
-    }
-});
-
-AchievementAPI.register("test_group", {
     unique: "second",
-    parent: {
-        unique: "first"
-    },
-    column: 1,
-    row: 0,
+    column: 3,
+    row: 1,
     name: {
         text: "Second",
         translate: ""
@@ -39,19 +23,38 @@ AchievementAPI.register("test_group", {
 });
 
 AchievementAPI.register("test_group", {
+    unique: "first",
+    parent: {
+        unique: "second"
+    },
+    column: 2,
+    row: 0,
+    connection: Connection.VERTICAL,
+    name: {
+        text: "First",
+        translate: ""
+    },
+    item: {
+        id: VanillaItemID.apple
+    }
+});
+
+
+AchievementAPI.register("test_group", {
     unique: "third",
     parent: {
         unique: "second"
     },
     strongDependence: true,
-    column: 2,
+    column: 4,
     row: 0,
+    connection: Connection.VERTICAL,
     name: {
         text: "Third",
         translate: ""
     },
     item: {
-        id: VanillaItemID.balloon
+        id: VanillaItemID.diamond
     }
 });
 

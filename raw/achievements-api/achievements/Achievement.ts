@@ -27,6 +27,8 @@ class Achievement {
             } else {
                 throw new IllegalArgumentException("Parent not found: achievement uid is invalid");
             }
+
+            description.connection = description.connection || Connection.HORIZONTAL;
         }
     }
 
