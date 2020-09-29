@@ -194,6 +194,17 @@ class AchievementAPI {
         return achievement;
     }
 
+    /**
+     * Register array of achievements
+     * @param uid - group unique identifier
+     * @param descriptions - descriptions array
+     */
+    static registerAll(uid: string, descriptions: IAchievement[]) {
+        for (let description of descriptions) {
+            AchievementAPI.register(uid, description);
+        }
+    }
+
     //noinspection JSUnusedGlobalSymbols
     /**
      * Load groups and achievements from JSON file
@@ -215,10 +226,8 @@ class AchievementAPI {
             let achievements = parsed.achievements;
             if (achievements) {
                 for (let key in achievements) {
-                    let achievementGroup = achievements[key];
-                    for (let key2 in achievementGroup) {
-                        AchievementAPI.register(key, achievementGroup[key2]);
-                    }
+                    const group = achievements[key];
+                    AchievementAPI.registerAll(key, group);
                 }
             }
 

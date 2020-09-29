@@ -7,44 +7,43 @@ AchievementAPI.registerGroup({
     icon: VanillaBlockID.bedrock
 });
 
-AchievementAPI.register("test_group", {
-    unique: "second",
-    column: 3,
-    row: 1,
-    name: {
-        text: "Second",
-        translate: ""
+AchievementAPI.registerAll("test_group", [
+    {
+        unique: "second",
+        column: 3,
+        row: 1,
+        name: {
+            text: "Second",
+            translate: ""
+        },
+        item: VanillaItemID.diamond_pickaxe
     },
-    item: VanillaItemID.diamond_pickaxe
-});
-
-AchievementAPI.register("test_group", {
-    unique: "first",
-    parent: "test_group:second",
-    column: 2,
-    row: 0,
-    connection: Connection.VERTICAL,
-    name: {
-        text: "First",
-        translate: ""
+    {
+        unique: "first",
+        parent: "test_group:second",
+        column: 2,
+        row: 0,
+        connection: Connection.VERTICAL,
+        name: {
+            text: "First",
+            translate: ""
+        },
+        item: VanillaItemID.apple
     },
-    item: VanillaItemID.apple
-});
-
-
-AchievementAPI.register("test_group", {
-    unique: "third",
-    parent: "second",
-    strongDependence: true,
-    column: 4,
-    row: 2,
-    connection: Connection.VERTICAL,
-    name: {
-        text: "Third",
-        translate: ""
-    },
-    item: VanillaItemID.diamond
-});
+    {
+        unique: "third",
+        parent: "second",
+        strongDependence: true,
+        column: 4,
+        row: 2,
+        connection: Connection.VERTICAL,
+        name: {
+            text: "Third",
+            translate: ""
+        },
+        item: VanillaItemID.diamond
+    }
+]);
 
 Callback.addCallback("ItemUse", function () {
     if (!AchievementAPI.isCompleted("test_group", "first")) {
