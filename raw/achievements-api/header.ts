@@ -1,6 +1,6 @@
 LIBRARY({
     name: "AchievementsAPI",
-    version: 0,
+    version: 2,
     shared: true,
     api: "CoreEngine"
 });
