@@ -10,26 +10,22 @@ class Achievement {
                 private description: IAchievement) {
         const parent = description.parent;
         if (parent) {
-            let child: Achievement | null = null;
-            if (!parent.groupUnique || parent.groupUnique == group.getUid()) {
-                child = group.getChild(parent.unique);
+            if (typeof parent === "string") {
+                const parts = parent.split(":");
+                this.parent =
+                    this.findParent(parts.length > 1 ? parts[0] : undefined, parts.length > 1 ? parts[1] : parts[0]);
             } else {
-                const otherGroup = AchievementAPI.groups[parent.groupUnique];
-                if (otherGroup) {
-                    child = otherGroup.getChild(parent.unique);
-                } else {
-                    throw new IllegalArgumentException("Parent not found: group uid is invalid");
-                }
+                this.parent = this.findParent(parent.groupUnique || group.getUid(), parent.unique);
             }
-
-            if (child) {
-                this.parent = child;
-            } else {
-                throw new IllegalArgumentException("Parent not found: achievement uid is invalid");
-            }
-
-            description.connection = description.connection || Connection.HORIZONTAL;
         }
+
+        if (typeof description.item === "number") {
+            description.item = {
+                id: description.item
+            };
+        }
+
+        description.connection = description.connection || Connection.HORIZONTAL;
     }
 
     give() {
@@ -46,7 +42,7 @@ class Achievement {
         }
 
         if (!this.description.notCompletePopup) {
-            let item = this.description.item;
+            let item = this.getIcon();
             let title;
             let color;
 
@@ -157,8 +153,8 @@ class Achievement {
         return this.data;
     }
 
-    getIcon() {
-        return this.description.item;
+    getIcon(): IItemIcon {
+        return this.description.item as IItemIcon;
     }
 
     getGroup() {
@@ -175,5 +171,25 @@ class Achievement {
 
     setData(value: IAchievementData) {
         this.data = value;
+    }
+
+    private findParent(groupUID: string | undefined, uid: string) {
+        let child: Achievement | null = null;
+        if (!groupUID || groupUID == this.getGroup().getUid()) {
+            child = this.getGroup().getChild(uid);
+        } else {
+            const otherGroup = AchievementAPI.groups[uid];
+            if (otherGroup) {
+                child = otherGroup.getChild(uid);
+            } else {
+                throw new IllegalArgumentException("Parent not found: group uid is invalid");
+            }
+        }
+
+        if (child) {
+            return child;
+        } else {
+            throw new IllegalArgumentException("Parent not found: achievement uid is invalid");
+        }
     }
 }

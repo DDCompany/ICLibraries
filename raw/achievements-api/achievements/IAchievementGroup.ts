@@ -33,10 +33,15 @@ interface IAchievementGroup {
      * is scaled to 50 pixels and duplicated in width nd height. Recommended size - 16x16
      * @default empty string
      */
+    background?: string;
+
+    /**
+     * @deprecated
+     */
     bgTexture?: string;
 
     /**
      * Group icon
      */
-    icon?: { id?: number, data?: number }
+    icon?: number | IItemIcon
 }

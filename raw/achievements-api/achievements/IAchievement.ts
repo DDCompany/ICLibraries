@@ -4,6 +4,11 @@ enum Connection {
     HORIZONTAL = "horizontal"
 }
 
+interface IItemIcon {
+    id: number,
+    data?: number
+}
+
 interface IAchievement {
     /**
      * Unique identifier
@@ -43,7 +48,7 @@ interface IAchievement {
     /**
      * Parent achievement. If contains in the current group, the achievements will be connected by a line
      */
-    parent?: IAchievementParent;
+    parent?: string | IAchievementParent;
 
     /**
      * If true, the achievements will not be displayed until parent achievement is not completed
@@ -75,7 +80,7 @@ interface IAchievement {
     /**
      * Achievement icon
      */
-    item?: { id: number, data?: number };
+    item?: number | IItemIcon;
 
     /**
      * Specifies the sides to which the connection will be connected

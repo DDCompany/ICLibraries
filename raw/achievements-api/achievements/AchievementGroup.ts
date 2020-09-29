@@ -5,6 +5,12 @@ class AchievementGroup {
         if (!description.unique) {
             throw new IllegalArgumentException("Invalid uid");
         }
+
+        if (typeof description.icon === "number") {
+            description.icon = {
+                id: description.icon
+            };
+        }
     }
 
     give(uid: string) {
@@ -61,12 +67,12 @@ class AchievementGroup {
         return this.description.name;
     }
 
-    getIcon() {
-        return this.description.icon;
+    getIcon(): IItemIcon {
+        return this.description.icon as IItemIcon;
     }
 
     getBgTextureName() {
-        return this.description.bgTexture;
+        return this.description.background || this.description.bgTexture;
     }
 
     getAchievementSize() {

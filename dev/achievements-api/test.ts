@@ -3,10 +3,8 @@ IMPORT("AchievementsAPI");
 AchievementAPI.registerGroup({
     unique: "test_group",
     name: "Test",
-    bgTexture: "groups_bg.end",
-    icon: {
-        id: VanillaBlockID.bedrock
-    }
+    background: "groups_bg.end",
+    icon: VanillaBlockID.bedrock
 });
 
 AchievementAPI.register("test_group", {
@@ -17,16 +15,12 @@ AchievementAPI.register("test_group", {
         text: "Second",
         translate: ""
     },
-    item: {
-        id: VanillaItemID.diamond_pickaxe
-    }
+    item: VanillaItemID.diamond_pickaxe
 });
 
 AchievementAPI.register("test_group", {
     unique: "first",
-    parent: {
-        unique: "second"
-    },
+    parent: "test_group:second",
     column: 2,
     row: 0,
     connection: Connection.VERTICAL,
@@ -34,28 +28,22 @@ AchievementAPI.register("test_group", {
         text: "First",
         translate: ""
     },
-    item: {
-        id: VanillaItemID.apple
-    }
+    item: VanillaItemID.apple
 });
 
 
 AchievementAPI.register("test_group", {
     unique: "third",
-    parent: {
-        unique: "second"
-    },
+    parent: "second",
     strongDependence: true,
     column: 4,
-    row: 0,
+    row: 2,
     connection: Connection.VERTICAL,
     name: {
         text: "Third",
         translate: ""
     },
-    item: {
-        id: VanillaItemID.diamond
-    }
+    item: VanillaItemID.diamond
 });
 
 Callback.addCallback("ItemUse", function () {

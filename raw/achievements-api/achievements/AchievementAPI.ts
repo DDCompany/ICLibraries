@@ -189,11 +189,6 @@ class AchievementAPI {
             throw new IllegalArgumentException("Invalid group uid");
         }
 
-        const parent = description.parent;
-        if (parent && !parent.groupUnique) {
-            parent.groupUnique = uid;
-        }
-
         let achievement = new Achievement(group, description);
         group.addChildren(achievement);
         return achievement;
@@ -244,12 +239,12 @@ class AchievementAPI {
         if (groupIcon) {
             slotIcon.id = groupIcon.id || 0;
             slotIcon.data = groupIcon.data || 0;
-            slotIcon.count = 1;
         } else {
             slotIcon.id = 0;
             slotIcon.data = 0;
-            slotIcon.count = 1;
         }
+
+        slotIcon.count = 1;
     }
 
     static initAchievementsForWindow(group: AchievementGroup, size: number, elements: UIElementSet) {
@@ -283,9 +278,8 @@ class AchievementAPI {
                 }
             };
 
-            let item = achievement.getIcon() || {id: 0, data: 0};
-
-            let slot = this.container.getSlot(index);
+            const item = achievement.getIcon() || {id: 0, data: 0};
+            const slot = this.container.getSlot(index);
             slot.id = item?.id ?? 0;
             slot.data = item?.data ?? 0;
             slot.count = 1;
