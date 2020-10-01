@@ -1,7 +1,7 @@
 class Achievement {
     private completed = false;
     private readonly parent: Achievement | null = null;
-    private data = {
+    private data: { progress: number, data: { [key: string]: any } } = {
         progress: 0, //TODO: move to another field when AchievementAPI.getData will removed
         data: {}
     };
