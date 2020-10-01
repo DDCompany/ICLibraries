@@ -3,3 +3,5 @@ enum AchievementType {
     challenge = "challenge",
     goal = "goal"
 }
+
+EXPORT("AchievementType", AchievementType);
