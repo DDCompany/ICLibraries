@@ -30,7 +30,7 @@ interface IAchievementGroup {
 
     /**
      * Path to the texture in resource directory, which is used as the background of the achievement area. This texture
-     * is scaled to 50 pixels and duplicated in width nd height. Recommended size - 16x16
+     * is scaled to 80 units and duplicated in width and height. Recommended size - 16x16
      * @default empty string
      */
     background?: string;
