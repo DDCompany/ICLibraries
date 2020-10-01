@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 interface ITranslatable {
     /**
      * Default text if string is not translated

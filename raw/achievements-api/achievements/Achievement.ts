@@ -19,6 +19,14 @@ class Achievement {
             }
         }
 
+        if (typeof description.name === "object") {
+            description.name = description.name.translate || description.name.text;
+        }
+
+        if (typeof description.description === "object") {
+            description.description = description.description.translate || description.description.text;
+        }
+
         if (typeof description.item === "number") {
             description.item = {
                 id: description.item
@@ -63,7 +71,7 @@ class Achievement {
             AchievementPopup.show({
                 title: title,
                 color: color,
-                description: AchievementAPI.getLocalized(this.description, "name"),
+                description: Translation.translate(this.description.name as string) || "",
                 item: {
                     id: item.id || 1,
                     data: item.data || 0,
@@ -87,15 +95,14 @@ class Achievement {
      * Show alert with information about achievement
      */
     showAlert() {
-        let info = AchievementAPI.getLocalized(this.description, "name");
+        let info = Translation.translate(this.description.name as string);
 
         if (this.description.progressMax) {
             info += `(${this.getProgress()}/${this.description.progressMax})`;
         }
 
-        let description = AchievementAPI.getLocalized(this.description, "description");
-        if (description) {
-            info += "\n" + description;
+        if (this.description.description) {
+            info += "\n" + Translation.translate(this.description.description as string);
         }
 
         alert(info);

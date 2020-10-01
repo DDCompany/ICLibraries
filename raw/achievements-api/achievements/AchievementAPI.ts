@@ -539,23 +539,6 @@ class AchievementAPI {
     /**
      * @deprecated
      */
-    static getLocalized(achievement: IAchievement, field: string): string {
-        let obj = (<{ [key: string]: any }>achievement)[field];
-        if (obj) {
-            if (obj.translate) {
-                let translated = Translation.translate(obj.translate);
-                return translated === obj.translate ? obj.text : translated;
-            }
-
-            return obj.text;
-        }
-
-        return "";
-    }
-
-    /**
-     * @deprecated
-     */
     static getAchievementY(achievement: IAchievement, size: number): number {
         return achievement.y || achievement.row * (size + 10);
     }

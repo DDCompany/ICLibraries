@@ -18,12 +18,12 @@ interface IAchievement {
     /**
      * Name of the achievement
      */
-    name?: ITranslatable;
+    name?: string | ITranslatable;
 
     /**
      * Description of the achievement
      */
-    description?: ITranslatable;
+    description?: string | ITranslatable;
 
     /**
      * Set the column in which the achievement will be located
