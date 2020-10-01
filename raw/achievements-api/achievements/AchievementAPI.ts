@@ -240,7 +240,7 @@ class AchievementAPI {
     static initGroupForWindow(group: AchievementGroup) {
         let parentElements = this.windowParent.getContent().elements;
         parentElements["textPageIndex"].text = (this.currentIndex + 1) + "/" + this.groupsAmount;
-        parentElements["textGroupName"].text = group.getName() || "";
+        parentElements["textGroupName"].text = Translation.translate(group.getName());
 
         let slotIcon = this.parentContainer.getSlot("slotGroupIcon");
         let groupIcon = group.getIcon();

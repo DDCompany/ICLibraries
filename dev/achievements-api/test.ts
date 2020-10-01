@@ -2,7 +2,7 @@ IMPORT("AchievementsAPI");
 
 AchievementAPI.registerGroup({
     unique: "test_group",
-    name: "Test",
+    name: "achievements.test",
     background: "groups_bg.end",
     icon: VanillaBlockID.bedrock
 });
@@ -36,6 +36,7 @@ AchievementAPI.registerAll("test_group", [
         item: VanillaItemID.diamond
     }
 ]);
+Translation.addTranslation("achievements.test", {en: "Test"});
 Translation.addTranslation("achievements.test.first", {en: "First Achievement"});
 Translation.addTranslation("achievements.test.second", {en: "Second Achievement"});
 Translation.addTranslation("achievements.test.third", {en: "Third Achievement"});
