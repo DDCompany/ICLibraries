@@ -190,7 +190,7 @@ class AchievementAPI {
         }
 
         let achievement = new Achievement(group, description);
-        group.addChildren(achievement);
+        group.addChild(achievement);
         return achievement;
     }
 

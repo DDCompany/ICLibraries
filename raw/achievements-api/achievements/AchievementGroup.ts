@@ -22,7 +22,7 @@ class AchievementGroup {
         achievement.give();
     }
 
-    addChildren(child: Achievement) {
+    addChild(child: Achievement) {
         if (this._children[child.uid]) {
             throw new IllegalArgumentException(`Achievement with uid '${child.uid}' already registered`);
         }
