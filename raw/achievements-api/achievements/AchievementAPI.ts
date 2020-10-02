@@ -83,7 +83,7 @@ class AchievementAPI {
                 bitmap2: "achievements_btn_close_hover",
                 scale: 5,
                 clicker: {
-                    onClick: function () {
+                    onClick() {
                         AchievementAPI.windowParent.close();
                         AchievementAPI.windowArea.close();
                     }
@@ -104,7 +104,7 @@ class AchievementAPI {
                 bitmap2: "btn_achievements_next_hover",
                 scale: 3,
                 clicker: {
-                    onClick: function () {
+                    onClick() {
                         AchievementAPI.currentIndex++;
                         AchievementAPI.openAchievementsWindow();
                     }
@@ -118,7 +118,7 @@ class AchievementAPI {
                 bitmap2: "btn_achievements_previous_hover",
                 scale: 3,
                 clicker: {
-                    onClick: function () {
+                    onClick() {
                         AchievementAPI.currentIndex--;
                         AchievementAPI.openAchievementsWindow();
                     }
@@ -144,7 +144,7 @@ class AchievementAPI {
         elements: {
             "btn": {
                 type: "button", x: 0, y: 0, bitmap: "btn_achievements", scale: 60, clicker: {
-                    onClick: function () {
+                    onClick() {
                         AchievementAPI.currentIndex = 0;
                         AchievementAPI.parentContainer.openAs(AchievementAPI.windowParent);
                         AchievementAPI.openAchievementsWindow();
@@ -281,7 +281,7 @@ class AchievementAPI {
                 bitmap: achievement.texture,
                 isTransparentBackground: true,
                 clicker: {
-                    onClick: function () {
+                    onClick() {
                         achievement.showAlert();
                     }
                 }
@@ -305,7 +305,7 @@ class AchievementAPI {
             z: -1,
             custom: {},
 
-            onSetup: function () {
+            onSetup() {
                 this.paint = new android.graphics.Paint();
                 this.paint.setARGB(255, 255, 255, 255);
                 this.paint.setStyle(android.graphics.Paint.Style.STROKE);
@@ -315,7 +315,7 @@ class AchievementAPI {
                 this.paint2.setStyle(android.graphics.Paint.Style.STROKE);
             },
 
-            onDraw: function (self: unknown, canvas: android.graphics.Canvas, scale: number) {
+            onDraw(self: unknown, canvas: android.graphics.Canvas, scale: number) {
                 if (!this.path) {
                     this.path = new android.graphics.Path();
 
@@ -383,7 +383,7 @@ class AchievementAPI {
         drawing.push({
             type: "custom",
 
-            onDraw: function (canvas: android.graphics.Canvas, scale: number) {
+            onDraw(canvas: android.graphics.Canvas, scale: number) {
                 let bitmap = android.graphics.Bitmap.createScaledBitmap(UI.TextureSource.get(bgTexture), 80 * scale,
                     80 * scale,
                     false);
@@ -633,18 +633,15 @@ class AchievementAPI {
 
 AchievementAPI.init();
 
-Callback.addCallback("PostLoaded", function () {
-    AchievementAPI.groupNames = Object.keys(AchievementAPI.groups);
-});
-Callback.addCallback("NativeGuiChanged", function (screenName: string) {
+Callback.addCallback("PostLoaded", () =>
+    AchievementAPI.groupNames = Object.keys(AchievementAPI.groups));
+Callback.addCallback("NativeGuiChanged", (screenName: string) => {
     if (screenName === "hud_screen" || screenName === "in_game_play_screen") {
         AchievementAPI.containerOverlay.openAs(AchievementAPI.groupsShowUI);
     } else {
         AchievementAPI.containerOverlay.close();
     }
 });
-Callback.addCallback("LevelLeft", function () {
-    AchievementAPI.resetAll();
-});
+Callback.addCallback("LevelLeft", () => AchievementAPI.resetAll());
 
 EXPORT("AchievementAPI", AchievementAPI);

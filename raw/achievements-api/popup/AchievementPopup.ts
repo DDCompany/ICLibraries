@@ -99,7 +99,7 @@ class AchievementPopup {
 
 AchievementPopup.init();
 
-Callback.addCallback("tick", function () {
+Callback.addCallback("tick", () => {
     if (!AchievementPopup.delay) {
         let popup = AchievementPopup.popQueue();
 

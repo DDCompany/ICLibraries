@@ -1,4 +1,4 @@
-Callback.addCallback("NativeCommand", function (str: string) {
+Callback.addCallback("NativeCommand", (str: string) => {
     str = str.replace("/", "");
     let parts = str.split(" ");
 
