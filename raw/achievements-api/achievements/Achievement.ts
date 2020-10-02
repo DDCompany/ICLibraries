@@ -1,60 +1,60 @@
 class Achievement {
     private completed = false;
-    private readonly parent: Achievement | null = null;
-    private data: { progress: number, data: { [key: string]: any } } = {
+    private readonly _parent: Achievement | null = null;
+    private _data: { progress: number, data: { [key: string]: any } } = {
         progress: 0, //TODO: move to another field when AchievementAPI.getData will removed
         data: {}
     };
 
-    constructor(private group: AchievementGroup,
-                private description: IAchievement) {
-        const parent = description.parent;
+    constructor(private _group: AchievementGroup,
+                private _description: IAchievement) {
+        const parent = _description.parent;
         if (parent) {
             if (typeof parent === "string") {
                 const parts = parent.split(":");
-                this.parent =
+                this._parent =
                     this.findParent(parts.length > 1 ? parts[0] : undefined, parts.length > 1 ? parts[1] : parts[0]);
             } else {
-                this.parent = this.findParent(parent.groupUnique || group.getUid(), parent.unique);
+                this._parent = this.findParent(parent.groupUnique || _group.uid, parent.unique);
             }
         }
 
-        if (typeof description.name === "object") {
-            description.name = description.name.translate || description.name.text;
+        if (typeof _description.name === "object") {
+            _description.name = _description.name.translate || _description.name.text;
         }
 
-        if (typeof description.description === "object") {
-            description.description = description.description.translate || description.description.text;
+        if (typeof _description.description === "object") {
+            _description.description = _description.description.translate || _description.description.text;
         }
 
-        if (typeof description.item === "number") {
-            description.item = {
-                id: description.item
+        if (typeof _description.item === "number") {
+            _description.item = {
+                id: _description.item
             };
         }
 
-        description.connection = description.connection || Connection.HORIZONTAL;
+        _description.connection = _description.connection || Connection.HORIZONTAL;
     }
 
     give() {
-        if (this.isCompleted()) {
+        if (this.isCompleted) {
             return;
         }
 
-        if (this.parent && !this.parent.isCompleted()) {
+        if (this._parent && !this._parent.isCompleted) {
             return; //Throw an exception? Hm...
         }
 
-        if (this.description.progressMax && ++this.data.progress < this.description.progressMax) {
+        if (this._description.progressMax && ++this._data.progress < this._description.progressMax) {
             return;
         }
 
-        if (!this.description.notCompletePopup) {
-            let item = this.getIcon();
+        if (!this._description.notCompletePopup) {
+            let item = this.icon;
             let title;
             let color;
 
-            switch (this.description.type) {
+            switch (this._description.type) {
                 case "challenge":
                     title = Translation.translate("message.achievementApi.challenge_complete");
                     color = android.graphics.Color.MAGENTA;
@@ -71,7 +71,7 @@ class Achievement {
             AchievementPopup.show({
                 title: title,
                 color: color,
-                description: Translation.translate(this.description.name as string) || "",
+                description: Translation.translate(this._description.name as string) || "",
                 item: {
                     id: item.id || 1,
                     data: item.data || 0,
@@ -81,109 +81,37 @@ class Achievement {
         }
 
         this.completed = true;
-        Callback.invokeCallback("onAchieve", this.group.getDescription(), this.getDescription());
+        Callback.invokeCallback("onAchieve", this._group.description, this.description);
         Callback.invokeCallback("onAchievementCompleted", this);
     }
 
     reset() {
         this.completed = false;
-        this.data.progress = 0;
-        this.data.data = {};
+        this._data.progress = 0;
+        this._data.data = {};
     }
 
     /**
      * Show alert with information about achievement
      */
     showAlert() {
-        let info = Translation.translate(this.description.name as string);
+        let info = Translation.translate(this._description.name as string);
 
-        if (this.description.progressMax) {
-            info += `(${this.getProgress()}/${this.description.progressMax})`;
+        if (this._description.progressMax) {
+            info += `(${this.progress}/${this._description.progressMax})`;
         }
 
-        if (this.description.description) {
-            info += "\n" + Translation.translate(this.description.description as string);
+        if (this._description.description) {
+            info += "\n" + Translation.translate(this._description.description as string);
         }
 
         alert(info);
     }
 
-    /**
-     * @return Is the achievement unlocked?
-     */
-    isUnlocked() {
-        return this.parent ? this.parent.isCompleted() : true;
-    }
-
-    /**
-     * @return Is the achievement completed?
-     */
-    isCompleted() {
-        return this.completed;
-    }
-
-    isStrongDependence() {
-        return this.description.strongDependence;
-    }
-
-    getTextureName() {
-        let type;
-
-        if (this.isCompleted()) {
-            type = "completed";
-        } else if (this.isUnlocked()) {
-            type = "unlocked";
-        } else {
-            type = "locked";
-        }
-
-        return "achievement_bg." + (this.description.type || "default") + "_" + type;
-    }
-
-    getParent() {
-        return this.parent;
-    }
-
-    getProgress(): number {
-        return this.data.progress;
-    }
-
-    getUid(): string {
-        return this.description.unique;
-    }
-
-    getDescription() {
-        return this.description;
-    }
-
-    getFullData() {
-        return this.data;
-    }
-
-    getIcon(): IItemIcon {
-        return this.description.item as IItemIcon;
-    }
-
-    getGroup() {
-        return this.group;
-    }
-
-    getData() {
-        return this.data.data;
-    }
-
-    setCompleted(value: boolean) {
-        this.completed = value;
-    }
-
-    setData(value: IAchievementData) {
-        this.data = value;
-    }
-
     private findParent(groupUID: string | undefined, uid: string) {
         let child: Achievement | null = null;
-        if (!groupUID || groupUID == this.getGroup().getUid()) {
-            child = this.getGroup().getChild(uid);
+        if (!groupUID || groupUID == this.group.uid) {
+            child = this.group.getChild(uid);
         } else {
             const otherGroup = AchievementAPI.groups[uid];
             if (otherGroup) {
@@ -198,5 +126,77 @@ class Achievement {
         } else {
             throw new IllegalArgumentException("Parent not found: achievement uid is invalid");
         }
+    }
+
+    /**
+     * @return Is the achievement unlocked?
+     */
+    get isUnlocked() {
+        return this._parent ? this._parent.isCompleted : true;
+    }
+
+    /**
+     * @return Is the achievement completed?
+     */
+    get isCompleted() {
+        return this.completed;
+    }
+
+    set isCompleted(value: boolean) {
+        this.completed = value;
+    }
+
+    get strongDependence() {
+        return this._description.strongDependence;
+    }
+
+    get texture() {
+        let type;
+
+        if (this.isCompleted) {
+            type = "completed";
+        } else if (this.isUnlocked) {
+            type = "unlocked";
+        } else {
+            type = "locked";
+        }
+
+        return "achievement_bg." + (this._description.type || "default") + "_" + type;
+    }
+
+    get parent() {
+        return this._parent;
+    }
+
+    get progress(): number {
+        return this._data.progress;
+    }
+
+    get uid(): string {
+        return this._description.unique;
+    }
+
+    get description(): IAchievement {
+        return this._description;
+    }
+
+    get fullData() {
+        return this._data;
+    }
+
+    set fullData(value: IAchievementData) {
+        this._data = value;
+    }
+
+    get icon() {
+        return this._description.item as IItemIcon;
+    }
+
+    get group(): AchievementGroup {
+        return this._group;
+    }
+
+    get data() {
+        return this._data.data;
     }
 }

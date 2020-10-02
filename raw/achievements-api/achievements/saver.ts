@@ -12,8 +12,8 @@ Saver.addSavesScope("AchievementsScope",
                     const child = group.getChild(key);
                     const saved = data[key];
                     if (child) {
-                        child.setCompleted(saved.completed);
-                        child.setData(saved.data);
+                        child.isCompleted = saved.completed;
+                        child.fullData = saved.data;
                     } else {
                         Logger.Log(`Achievement with uid '${key}' not found. Skipping...`, "WARNING");
                     }
@@ -31,11 +31,11 @@ Saver.addSavesScope("AchievementsScope",
             const group = AchievementAPI.groups[groupKey];
             const _data: { [key: string]: { completed: boolean, data: IAchievementData } } = {};
 
-            for (let key in group.getChildren()) {
+            for (let key in group.children) {
                 const child = group.getChild(key);
                 _data[key] = {
-                    completed: child.isCompleted(),
-                    data: child.getFullData()
+                    completed: child.isCompleted,
+                    data: child.fullData
                 };
             }
             data[groupKey] = _data;

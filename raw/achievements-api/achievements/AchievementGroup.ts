@@ -1,14 +1,14 @@
 class AchievementGroup {
-    private children: { [key: string]: Achievement } = {};
+    private _children: { [key: string]: Achievement } = {};
 
-    constructor(private description: IAchievementGroup) {
-        if (!description.unique) {
+    constructor(private _description: IAchievementGroup) {
+        if (!_description.unique) {
             throw new IllegalArgumentException("Invalid uid");
         }
 
-        if (typeof description.icon === "number") {
-            description.icon = {
-                id: description.icon
+        if (typeof _description.icon === "number") {
+            _description.icon = {
+                id: _description.icon
             };
         }
     }
@@ -22,60 +22,60 @@ class AchievementGroup {
         achievement.give();
     }
 
+    addChildren(child: Achievement) {
+        if (this._children[child.uid]) {
+            throw new IllegalArgumentException(`Achievement with uid '${child.uid}' already registered`);
+        }
+
+        this._children[child.uid] = child;
+    }
+
     /**
      * Give all achievements of the group
      */
     giveAll() {
-        for (let key in this.children) {
-            this.children[key].give();
+        for (let key in this._children) {
+            this._children[key].give();
         }
-    }
-
-    getUid() {
-        return this.description.unique;
-    }
-
-    addChildren(child: Achievement) {
-        if (this.children[child.getUid()]) {
-            throw new IllegalArgumentException(`Achievement with uid '${child.getUid()}' already registered`);
-        }
-
-        this.children[child.getUid()] = child;
     }
 
     getChild(uid: string) {
-        return this.children[uid];
+        return this._children[uid];
     }
 
-    getChildren() {
-        return this.children;
+    get uid() {
+        return this._description.unique;
     }
 
-    getDescription() {
-        return this.description;
+    get children() {
+        return this._children;
     }
 
-    getWidth() {
-        return this.description.width;
+    get description(): IAchievementGroup {
+        return this._description;
     }
 
-    getHeight() {
-        return this.description.height;
+    get width() {
+        return this._description.width;
     }
 
-    getName() {
-        return this.description.name;
+    get height() {
+        return this._description.height;
     }
 
-    getIcon(): IItemIcon {
-        return this.description.icon as IItemIcon;
+    get name() {
+        return this._description.name;
     }
 
-    getBgTextureName() {
-        return this.description.background || this.description.bgTexture;
+    get icon() {
+        return this._description.icon as IItemIcon;
     }
 
-    getAchievementSize() {
-        return this.description.size;
+    get nodeSize() {
+        return this._description.size;
+    }
+
+    get backgroundTexture() {
+        return this._description.background || this._description.bgTexture;
     }
 }

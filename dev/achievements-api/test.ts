@@ -70,7 +70,7 @@ Callback.addCallback("ItemUse", (coords: ItemUseCoordinates, item: ItemInstance)
                 AchievementAPI
                     .getGroup("world_of_colors")
                     .getChild("glass");
-            const data = achievement.getData();
+            const data = achievement.data;
             if (!data[item.data]) {
                 data[item.data] = true;
                 achievement.give();

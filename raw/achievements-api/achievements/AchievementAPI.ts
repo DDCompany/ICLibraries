@@ -169,11 +169,11 @@ class AchievementAPI {
     static registerGroup(description: IAchievementGroup): AchievementGroup {
         const group = new AchievementGroup(description);
 
-        if (this.groups[group.getUid()]) {
+        if (this.groups[group.uid]) {
             throw new IllegalArgumentException(`Group with uid "$\{uid}" already registered`);
         }
 
-        this.groups[group.getUid()] = group;
+        this.groups[group.uid] = group;
         this.groupsAmount++;
         return group;
     }
@@ -240,10 +240,10 @@ class AchievementAPI {
     static initGroupForWindow(group: AchievementGroup) {
         let parentElements = this.windowParent.getContent().elements;
         parentElements["textPageIndex"].text = (this.currentIndex + 1) + "/" + this.groupsAmount;
-        parentElements["textGroupName"].text = Translation.translate(group.getName());
+        parentElements["textGroupName"].text = Translation.translate(group.name);
 
         let slotIcon = this.parentContainer.getSlot("slotGroupIcon");
-        let groupIcon = group.getIcon();
+        let groupIcon = group.icon;
 
         if (groupIcon) {
             slotIcon.id = groupIcon.id || 0;
@@ -258,19 +258,19 @@ class AchievementAPI {
 
     static initAchievementsForWindow(group: AchievementGroup, size: number, elements: UIElementSet) {
         let contentExist;
-        for (let index in group.getChildren()) {
+        for (let index in group.children) {
             let achievement = group.getChild(index);
-            let parent = achievement.getParent();
+            let parent = achievement.parent;
 
             if (parent) {
-                if (!parent.isCompleted() && achievement.isStrongDependence()) {
+                if (!parent.isCompleted && achievement.strongDependence) {
                     continue;
                 }
             }
             contentExist = true;
 
-            let x = this.getAchievementX(achievement.getDescription(), size);
-            let y = this.getAchievementY(achievement.getDescription(), size);
+            let x = this.getAchievementX(achievement.description, size);
+            let y = this.getAchievementY(achievement.description, size);
 
             elements[index] = {
                 type: "slot",
@@ -278,7 +278,7 @@ class AchievementAPI {
                 y: y,
                 size: size,
                 visual: true,
-                bitmap: achievement.getTextureName(),
+                bitmap: achievement.texture,
                 isTransparentBackground: true,
                 clicker: {
                     onClick: function () {
@@ -287,7 +287,7 @@ class AchievementAPI {
                 }
             };
 
-            const item = achievement.getIcon() || {id: 0, data: 0};
+            const item = achievement.icon || {id: 0, data: 0};
             const slot = this.container.getSlot(index);
             slot.id = item?.id ?? 0;
             slot.data = item?.data ?? 0;
@@ -319,27 +319,27 @@ class AchievementAPI {
                 if (!this.path) {
                     this.path = new android.graphics.Path();
 
-                    for (let index in group.getChildren()) {
+                    for (let index in group.children) {
                         let achievement = group.getChild(index);
-                        let parent = achievement.getParent();
+                        let parent = achievement.parent;
 
-                        if (achievement.getDescription().connection === Connection.NONE) {
+                        if (achievement.description.connection === Connection.NONE) {
                             continue;
                         }
 
-                        if (!parent || parent.getGroup().getUid() !== group.getUid() ||
-                            (!parent.isCompleted() && achievement.isStrongDependence())) {
+                        if (!parent || parent.group.uid !== group.uid ||
+                            (!parent.isCompleted && achievement.strongDependence)) {
                             continue;
                         }
 
-                        let parentItem = group.getChild(parent.getUid());
+                        let parentItem = group.getChild(parent.uid);
                         if (parentItem) {
-                            let x = AchievementAPI.getAchievementX(achievement.getDescription(), size);
-                            let y = AchievementAPI.getAchievementY(achievement.getDescription(), size);
+                            let x = AchievementAPI.getAchievementX(achievement.description, size);
+                            let y = AchievementAPI.getAchievementY(achievement.description, size);
                             let _x = (x + halfOfSize) * scale;
                             let _y = (y + halfOfSize) * scale;
-                            let parentX = AchievementAPI.getAchievementX(parentItem.getDescription(), size);
-                            let parentY = AchievementAPI.getAchievementY(parentItem.getDescription(), size);
+                            let parentX = AchievementAPI.getAchievementX(parentItem.description, size);
+                            let parentY = AchievementAPI.getAchievementY(parentItem.description, size);
                             let _parentX = (parentX + halfOfSize) * scale;
                             let _parentY = (parentY + halfOfSize) * scale;
 
@@ -352,7 +352,7 @@ class AchievementAPI {
                                 this.path.moveTo(_x, _y);
                                 this.path.lineTo(x2, _y);
 
-                                switch (achievement.getDescription().connection) {
+                                switch (achievement.description.connection) {
                                     case Connection.HORIZONTAL:
                                         this.path.lineTo(x2, _parentY);
                                         this.path.lineTo(_parentX, _parentY);
@@ -406,21 +406,21 @@ class AchievementAPI {
         }
 
         let group = this.groups[this.groupNames[AchievementAPI.currentIndex]];
-        let width = group.getWidth() || 600;
-        let height = group.getHeight() || 250;
+        let width = group.width || 600;
+        let height = group.height || 250;
         let elements: UIElementSet = {};
         let drawing = [{type: "color", color: android.graphics.Color.rgb(0, 0, 0)}];
 
         this.initGroupForWindow(group);
 
-        let size = group.getAchievementSize() || 100;
+        let size = group.nodeSize || 100;
         let contentExist = this.initAchievementsForWindow(group, size, elements);
 
         if (contentExist) {
             this.initConditionsForWindow(group, size, elements);
 
-            if (group.getBgTextureName()) {
-                this.initBackgroundForWindow(drawing, group.getBgTextureName());
+            if (group.backgroundTexture) {
+                this.initBackgroundForWindow(drawing, group.backgroundTexture);
             }
         } else {
             width = 432;
@@ -482,7 +482,7 @@ class AchievementAPI {
             throw new IllegalArgumentException(`Achievement with uid '${groupUID}' not found`);
         }
 
-        return achievement.isUnlocked();
+        return achievement.isUnlocked;
     }
 
     /**
@@ -500,7 +500,7 @@ class AchievementAPI {
      * @returns Is the achievement completed?
      */
     static isCompleted(groupUID: string, uid: string): boolean {
-        return this.groups[groupUID].getChild(uid).isCompleted();
+        return this.groups[groupUID].getChild(uid).isCompleted;
     }
 
     /**
@@ -519,7 +519,7 @@ class AchievementAPI {
     static resetAll() {
         for (let groupKey in this.groups) {
             const group = this.groups[groupKey];
-            for (let key in group.getChildren()) {
+            for (let key in group.children) {
                 const child = group.getChild(key);
                 child.reset();
             }
@@ -565,7 +565,7 @@ class AchievementAPI {
             throw new IllegalArgumentException("Invalid achievement uid");
         }
 
-        return child.getTextureName();
+        return child.texture;
     }
 
     /**
@@ -582,7 +582,7 @@ class AchievementAPI {
             throw new IllegalArgumentException("Invalid achievement uid");
         }
 
-        return child.getFullData();
+        return child.fullData;
     }
 
     //noinspection JSUnusedGlobalSymbols
@@ -627,7 +627,7 @@ class AchievementAPI {
      * @deprecated
      */
     static getProgress(group: IAchievementGroup, achievement: IAchievement) {
-        return this.groups[group.unique].getChild(achievement.unique).getProgress();
+        return this.groups[group.unique].getChild(achievement.unique).progress;
     }
 }
 
