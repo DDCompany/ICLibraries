@@ -1,5 +1,5 @@
 class AchievementGroup {
-    private _children: { [key: string]: Achievement } = {};
+    private readonly _children: Dictionary<Achievement> = {};
 
     constructor(private _description: IAchievementGroup) {
         if (!_description.unique) {
@@ -51,7 +51,7 @@ class AchievementGroup {
         return this._children;
     }
 
-    get description(): IAchievementGroup {
+    get description() {
         return this._description;
     }
 

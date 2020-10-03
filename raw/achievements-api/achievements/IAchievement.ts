@@ -89,4 +89,10 @@ interface IAchievement {
     connection?: Connection
 }
 
+interface IConvertedAchievement extends IAchievement {
+    name: string
+    description: string
+    item?: IItemIcon
+}
+
 EXPORT("Connection", Connection);

@@ -6,7 +6,7 @@ class AchievementAPI {
     /**
      * Array of registered groups by <i>AchievementAPI.registerGroup</i>
      */
-    static groups: { [key: string]: AchievementGroup } = {};
+    static groups: Dictionary<AchievementGroup> = {};
 
     /**
      * Array of groups identifiers
@@ -37,7 +37,7 @@ class AchievementAPI {
      * Current group index
      */
     static currentIndex = 0;
-    static windowArea: UI.Window | null = null;
+    static windowArea: Nullable<UI.Window> = null;
     /**
      * Background window
      */
@@ -526,8 +526,8 @@ class AchievementAPI {
         }
     }
 
-    static getGroup(uid: string): AchievementGroup | undefined {
-        return this.groups[uid];
+    static getGroup(uid: string): Nullable<AchievementGroup> {
+        return this.groups[uid] || null;
     }
 
     /*

@@ -92,8 +92,8 @@ class AchievementPopup {
     /**
      * @return last popup in queue
      */
-    static popQueue(): IAchievementPopup | undefined {
-        return this.popupQueue.pop();
+    static popQueue(): Nullable<IAchievementPopup> {
+        return this.popupQueue.pop() || null;
     }
 }
 

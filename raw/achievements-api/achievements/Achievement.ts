@@ -1,13 +1,18 @@
+interface IFullData {
+    progress: number
+    data: Dictionary<any>
+}
+
 class Achievement {
     private completed = false;
-    private readonly _parent: Achievement | null = null;
-    private _data: { progress: number, data: { [key: string]: any } } = {
+    private _data: IFullData = {
         progress: 0, //TODO: move to another field when AchievementAPI.getData will removed
         data: {}
     };
+    private readonly _parent: Nullable<Achievement>;
+    private readonly _description: IConvertedAchievement;
 
-    constructor(private _group: AchievementGroup,
-                private _description: IAchievement) {
+    constructor(private _group: AchievementGroup, _description: IAchievement) {
         const parent = _description.parent;
         if (parent) {
             if (typeof parent === "string") {
@@ -34,6 +39,7 @@ class Achievement {
         }
 
         _description.connection = _description.connection || Connection.HORIZONTAL;
+        this._description = _description as IConvertedAchievement;
     }
 
     give() {
@@ -71,7 +77,7 @@ class Achievement {
             AchievementPopup.show({
                 title: title,
                 color: color,
-                description: Translation.translate(this._description.name as string) || "",
+                description: Translation.translate(this._description.name) || "",
                 item: {
                     id: item.id || 1,
                     data: item.data || 0,
@@ -95,21 +101,21 @@ class Achievement {
      * Show alert with information about achievement
      */
     showAlert() {
-        let info = Translation.translate(this._description.name as string);
+        let info = Translation.translate(this._description.name);
 
         if (this._description.progressMax) {
             info += `(${this.progress}/${this._description.progressMax})`;
         }
 
         if (this._description.description) {
-            info += "\n" + Translation.translate(this._description.description as string);
+            info += "\n" + Translation.translate(this._description.description);
         }
 
         alert(info);
     }
 
-    private findParent(groupUID: string | undefined, uid: string) {
-        let child: Achievement | null = null;
+    private findParent(groupUID: Nullable<string>, uid: string) {
+        let child: Nullable<Achievement> = null;
         if (!groupUID || groupUID == this.group.uid) {
             child = this.group.getChild(uid);
         } else {
@@ -176,7 +182,7 @@ class Achievement {
         return this._description.unique;
     }
 
-    get description(): IAchievement {
+    get description() {
         return this._description;
     }
 
@@ -189,10 +195,10 @@ class Achievement {
     }
 
     get icon() {
-        return this._description.item as IItemIcon;
+        return this._description.item;
     }
 
-    get group(): AchievementGroup {
+    get group() {
         return this._group;
     }
 

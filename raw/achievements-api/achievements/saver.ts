@@ -1,5 +1,10 @@
+interface ISavedAchievement {
+    completed: boolean
+    data: IAchievementData
+}
+
 interface IAchievementsSaver {
-    [key: string]: { [key: string]: { completed: boolean, data: IAchievementData } }
+    [key: string]: Dictionary<ISavedAchievement>
 }
 
 Saver.addSavesScope("AchievementsScope",
@@ -29,7 +34,7 @@ Saver.addSavesScope("AchievementsScope",
 
         for (let groupKey in AchievementAPI.groups) {
             const group = AchievementAPI.groups[groupKey];
-            const _data: { [key: string]: { completed: boolean, data: IAchievementData } } = {};
+            const _data: Dictionary<ISavedAchievement> = {};
 
             for (let key in group.children) {
                 const child = group.getChild(key);
