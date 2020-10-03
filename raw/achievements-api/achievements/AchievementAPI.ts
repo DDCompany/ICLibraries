@@ -52,7 +52,7 @@ class AchievementAPI {
             {type: "frame", x: 0, y: 0, width: 1000, height: 725, bitmap: "achievements_frame", scale: 5},
             {
                 type: "text",
-                text: Translation.translate("achievementApi.achievements"),
+                text: Translation.translate("achievement_api.achievements"),
                 x: 80,
                 y: 65,
                 font: {size: 35, color: android.graphics.Color.DKGRAY}
@@ -426,11 +426,7 @@ class AchievementAPI {
             width = 432;
             height = 260;
 
-            let translated = Translation.translate("achievementApi.nothing");
-            if (translated === "achievementApi.nothing") {
-                translated = "Nothing to Show :(";
-            }
-
+            let translated = Translation.translate("achievements_api.nothing");
             elements["nothing"] = {
                 type: "text",
                 x: 0,

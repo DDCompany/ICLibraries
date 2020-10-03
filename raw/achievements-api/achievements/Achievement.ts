@@ -62,15 +62,15 @@ class Achievement {
 
             switch (this._description.type) {
                 case "challenge":
-                    title = Translation.translate("message.achievementApi.challenge_complete");
+                    title = Translation.translate("achievements_api.challenge_complete");
                     color = android.graphics.Color.MAGENTA;
                     break;
                 case "goal":
-                    title = Translation.translate("message.achievementApi.goal_complete");
+                    title = Translation.translate("achievements_api.goal_complete");
                     color = android.graphics.Color.YELLOW;
                     break;
                 default:
-                    title = Translation.translate("message.achievementApi.achievement_complete");
+                    title = Translation.translate("achievements_api.complete");
                     color = android.graphics.Color.YELLOW;
             }
 

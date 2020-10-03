@@ -1,16 +1,20 @@
-Translation.addTranslation("message.achievementApi.achievement_complete", {
+Translation.addTranslation("achievements_api.complete", {
     en: "Achievement Made!",
     ru: "Достижение выполнено"
 });
-Translation.addTranslation("message.achievementApi.challenge_complete", {
+Translation.addTranslation("achievements_api.challenge_complete", {
     en: "Challenge Made!",
     ru: "Испытание выполнено"
 });
-Translation.addTranslation("message.achievementApi.goal_complete", {
+Translation.addTranslation("achievements_api.goal_complete", {
     en: "Goal Completed",
     ru: "Цель выполнена"
 });
-Translation.addTranslation("achievementApi.achievements", {en: "Advancements", ru: "Достижения"});
-Translation.addTranslation("achievementApi.nothing", {
+Translation.addTranslation("achievements_api.achievements", {
+    en: "Advancements",
+    ru: "Достижения"
+});
+Translation.addTranslation("achievements_api.nothing", {
+    en: "Nothing to Show :(",
     ru: "Здесь ничего нет :("
 });
