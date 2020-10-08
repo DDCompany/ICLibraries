@@ -21,6 +21,4 @@ Baubles.registerBauble({
     }
 });
 
-Network.addClientPacket("baubles_test.wind_ring", (data) => {
-    Player.setFlyingEnabled(data.equip);
-});
+Network.addClientPacket("baubles_test.wind_ring", (data) => Player.setFlyingEnabled(data.equip));

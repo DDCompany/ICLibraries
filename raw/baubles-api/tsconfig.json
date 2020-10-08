@@ -8,6 +8,7 @@
     "banner.ts",
     "header.ts",
     "ui.ts",
+    "BaubleDescription.ts",
     "api.ts",
     "saves.ts"
   ]

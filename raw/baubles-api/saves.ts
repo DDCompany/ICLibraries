@@ -1,12 +1,8 @@
 Saver.addSavesScope("Baubles",
-    function read(data: BaublesData) {
+    (data: BaublesData) => {
         Baubles.data = data;
         for (const uid in data) {
-            const save = data[uid];
-            Baubles.setupContainer(save.container, parseInt(uid));
+            Baubles.setupContainer(parseInt(uid), data[uid].container);
         }
     },
-    function save() {
-        return Baubles.data;
-    }
-);
+    () => Baubles.data);
