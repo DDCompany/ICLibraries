@@ -10,13 +10,13 @@ interface BaubleDescription {
     /**
      * Called when equipping the item and upon entering the world if the item is equipped
      */
-    onEquip?: (client: ConnectedClient) => void
+    onEquip?: (client: ConnectedClient, container: ItemContainer, slotName: string) => void
     /**
      * Called when a player take off the item or dies
      */
-    onTakeOff?: (client: ConnectedClient) => void
+    onTakeOff?: (client: ConnectedClient, container: ItemContainer, slotName: string) => void
     /**
      * Called every tick if the the item is equipped
      */
-    tick: (client: ConnectedClient) => void
+    tick: (client: ConnectedClient, container: ItemContainer, slotName: string) => void
 }

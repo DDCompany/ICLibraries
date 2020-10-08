@@ -44,6 +44,35 @@ class Baubles {
             (client) => this.openGuiFor(client));
     }
 
+    static setupContainer(playerUid: number, container: ItemContainer = new ItemContainer()) {
+        container.setClientContainerTypeName("baubles.ui");
+
+        const slots = ["amulet", "ring0", "ring1", "belt", "head", "body", "charm"];
+        for (const name of slots) {
+            container.setDirtySlotListener(name, (container, name, slot) => {
+                const data = Baubles.data[playerUid];
+                const old = data.cache[name];
+                if (!old && slot.id > 0 || slot.id !== old.id) {
+                    const client = Network.getClientForPlayer(playerUid);
+                    if (old) {
+                        Baubles.getDesc(old.id)?.onTakeOff(client, data.container, name);
+                    }
+                    Baubles.getDesc(slot.id)?.onEquip(client, data.container, name);
+                    data.cache[name] = {
+                        id: slot.id
+                    };
+                }
+            });
+
+            container.setSlotAddTransferPolicy(name, (container, name, id, amount) => {
+                const baubleType = name === "ring0" || name === "ring1" ? "ring" : name;
+                return Baubles.getType(id) === baubleType ? Math.min(amount, Item.getMaxStack(id) - container.getSlot(name).count) : 0;
+            });
+        }
+
+        return container;
+    }
+
     static getContainer(client: ConnectedClient) {
         const uid = client.getPlayerUid();
         let bauble = this.data[uid];
@@ -60,11 +89,12 @@ class Baubles {
 
     static tick() {
         for (const uid in Baubles.data) {
-            const cache = Baubles.data[uid].cache;
+            let data = Baubles.data[uid];
+            const cache = data.cache;
             const client = Network.getClientForPlayer(parseInt(uid));
             for (const slot in cache) {
                 Baubles.getDesc(cache[slot].id)
-                    ?.tick(client);
+                    ?.tick(client, data.container, slot);
             }
         }
     }
@@ -100,35 +130,6 @@ class Baubles {
     static getDataFor(playerUid: number) {
         return this.data[playerUid] || null;
     }
-
-    static setupContainer(playerUid: number, container: ItemContainer = new ItemContainer()) {
-        container.setClientContainerTypeName("baubles.ui");
-
-        const slots = ["amulet", "ring0", "ring1", "belt", "head", "body", "charm"];
-        for (const name of slots) {
-            container.setDirtySlotListener(name, (container, name, slot) => {
-                const data = Baubles.data[playerUid];
-                const old = data.cache[name];
-                if (!old && slot.id > 0 || slot.id !== old.id) {
-                    const client = Network.getClientForPlayer(playerUid);
-                    if (old) {
-                        Baubles.getDesc(old.id)?.onTakeOff(client);
-                    }
-                    Baubles.getDesc(slot.id)?.onEquip(client);
-                    data.cache[name] = {
-                        id: slot.id
-                    };
-                }
-            });
-
-            container.setSlotAddTransferPolicy(name, (container, name, id, amount) => {
-                const baubleType = name === "ring0" || name === "ring1" ? "ring" : name;
-                return Baubles.getType(id) === baubleType ? Math.min(amount, Item.getMaxStack(id) - container.getSlot(name).count) : 0;
-            });
-        }
-
-        return container;
-    }
 }
 
 Baubles.setupClientSide();
@@ -151,7 +152,7 @@ Callback.addCallback("EntityDeath", (entity: number) => {
         for (let i in data.cache) {
             const bauble = data.cache[i];
             if (bauble.onTakeOff) {
-                bauble.onTakeOff(Network.getClientForPlayer(entity));
+                bauble.onTakeOff(Network.getClientForPlayer(entity), data.container, i);
             }
             container.dropSlot(blockSource, i, pos.x, pos.y, pos.z);
         }
