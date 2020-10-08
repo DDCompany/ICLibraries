@@ -86,7 +86,9 @@ let BUTTON_GUI = new UI.Window({
             scale: 1000 / 26,
             clicker: {
                 onClick: function () {
-                    Baubles.openGui();
+                    Threading.initThread("Baubles UI open request", () => {
+                        Baubles.openGui();
+                    });
                 }
             }
         }

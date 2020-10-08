@@ -1,1 +1,4 @@
+ConfigureMultiplayer({
+    isClientOnly: false
+});
 Launch();
