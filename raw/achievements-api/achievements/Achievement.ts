@@ -119,7 +119,7 @@ class Achievement {
         if (!groupUID || groupUID == this.group.uid) {
             child = this.group.getChild(uid);
         } else {
-            const otherGroup = AchievementAPI.groups[uid];
+            const otherGroup = AchievementAPI.groups[groupUID];
             if (otherGroup) {
                 child = otherGroup.getChild(uid);
             } else {
