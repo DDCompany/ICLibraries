@@ -75,7 +75,6 @@ class Baubles {
         const uid = client.getPlayerUid();
         let bauble = this.data[uid];
         if (!bauble) {
-            alert("created new");
             bauble = this.data[uid] = {
                 container: this.setupContainer(client.getPlayerUid()),
                 cache: {}
@@ -89,12 +88,7 @@ class Baubles {
         for (const uid in Baubles.data) {
             let data = Baubles.data[uid];
             const cache = data.cache;
-            let number = parseInt(uid);
-            if (isNaN(number)) {
-                alert("NAN - " + uid);
-                continue;
-            }
-            const client = Network.getClientForPlayer(number);
+            const client = Network.getClientForPlayer(parseInt(uid));
             for (const slot in cache) {
                 Baubles.getDesc(cache[slot])
                     ?.tick(client, data.container, slot);
@@ -104,7 +98,6 @@ class Baubles {
 
     static openGui() {
         Network.sendToServer("baubles.open_ui", {});
-        alert("Packet open send");
     }
 
     static openGuiFor(client: ConnectedClient) {
