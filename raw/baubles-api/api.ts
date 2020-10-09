@@ -135,6 +135,23 @@ Callback.addCallback("tick", () => Baubles.tick());
 
 Callback.addCallback("LevelLeft", () => Baubles.reset());
 
+Callback.addCallback("LevelLoaded", () => {
+    const data = Baubles.data;
+    for (let uid in data) {
+        const client = Network.getClientForPlayer(parseInt(uid));
+        const datum = data[uid];
+        const cache = datum.cache;
+        for (let slot in cache) {
+            const desc = Baubles.getDesc(cache[slot]);
+            if (!desc) {
+                continue;
+            }
+
+            desc.onEquip(client, datum.container, slot);
+        }
+    }
+});
+
 Callback.addCallback("EntityDeath", (entity: number) => {
     if (Entity.getType(entity) === 1) { //player
         const data = Baubles.getDataFor(entity);
