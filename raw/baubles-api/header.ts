@@ -1,6 +1,6 @@
 LIBRARY({
     name: "BaublesAPI",
-    version: 0,
+    version: 1,
     shared: true,
     api: "CoreEngine"
 });
