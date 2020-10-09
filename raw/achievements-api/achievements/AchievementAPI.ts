@@ -52,7 +52,7 @@ class AchievementAPI {
             {type: "frame", x: 0, y: 0, width: 1000, height: 725, bitmap: "achievements_frame", scale: 5},
             {
                 type: "text",
-                text: Translation.translate("achievement_api.achievements"),
+                text: Translation.translate("achievements_api.achievements"),
                 x: 80,
                 y: 65,
                 font: {size: 35, color: android.graphics.Color.DKGRAY}
