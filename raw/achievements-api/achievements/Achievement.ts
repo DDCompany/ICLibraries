@@ -123,14 +123,14 @@ class Achievement {
             if (otherGroup) {
                 child = otherGroup.getChild(uid);
             } else {
-                throw new IllegalArgumentException("Parent not found: group uid is invalid");
+                throw new IllegalArgumentException(`Parent not found: group uid is invalid (${groupUID}:${uid})`);
             }
         }
 
         if (child) {
             return child;
         } else {
-            throw new IllegalArgumentException("Parent not found: achievement uid is invalid");
+            throw new IllegalArgumentException(`Parent not found: achievement uid is invalid (${groupUID}:${uid})`);
         }
     }
 
