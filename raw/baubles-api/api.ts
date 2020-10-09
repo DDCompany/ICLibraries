@@ -52,15 +52,13 @@ class Baubles {
             container.setDirtySlotListener(name, (container, name, slot) => {
                 const data = Baubles.data[playerUid];
                 const old = data.cache[name];
-                if (!old && slot.id > 0 || slot.id !== old.id) {
+                if (!old && slot.id > 0 || slot.id !== old) {
                     const client = Network.getClientForPlayer(playerUid);
                     if (old) {
                         Baubles.getDesc(old.id)?.onTakeOff(client, data.container, name);
                     }
                     Baubles.getDesc(slot.id)?.onEquip(client, data.container, name);
-                    data.cache[name] = {
-                        id: slot.id
-                    };
+                    data.cache[name] = slot.id;
                 }
             });
 
@@ -91,9 +89,14 @@ class Baubles {
         for (const uid in Baubles.data) {
             let data = Baubles.data[uid];
             const cache = data.cache;
-            const client = Network.getClientForPlayer(parseInt(uid));
+            let number = parseInt(uid);
+            if (isNaN(number)) {
+                alert("NAN - " + uid);
+                continue;
+            }
+            const client = Network.getClientForPlayer(number);
             for (const slot in cache) {
-                Baubles.getDesc(cache[slot].id)
+                Baubles.getDesc(cache[slot])
                     ?.tick(client, data.container, slot);
             }
         }

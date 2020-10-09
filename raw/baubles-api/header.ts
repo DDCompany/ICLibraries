@@ -4,3 +4,5 @@ LIBRARY({
     shared: true,
     api: "CoreEngine"
 });
+
+const LOG_TAG = "BAUBLES-API";
