@@ -1,5 +1,4 @@
 module.exports = function (grunt) {
-    const GUIDE_API = "raw/guide-api/";
     const ACHIEVEMENTS_API = "raw/achievements-api/";
     const BACKPACK_API = "raw/backpack-api/";
     const BAUBLES_API = "raw/baubles-api/";
@@ -11,25 +10,6 @@ module.exports = function (grunt) {
       - Запрещено явное копирование кода в другие библиотеки или моды
       - Используя библиотеку вы автоматически соглашаетесь с описанными
         выше условиями`;
-
-    function getGuideAPIBanner() {
-        return `/*
-     _____         _      _         ___  ______  _____
-    |  __ \\       (_)    | |       / _ \\ | ___ \\|_   _|
-    | |  \\/ _   _  _   __| |  ___ / /_\\ \\| |_/ /  | |
-    | | __ | | | || | / _\` | / _ \\|  _  ||  __/   | |
-    | |_\\ \\| |_| || || (_| ||  __/| | | || |     _| |_
-    \\____/ \\__,_||_| \\__,_| \\___|\\_| |_/\\_|     \\___/
-                
-    GuideAPI library
-     
-    ${TERMS_OF_USE}
-             
-    ${COPYRIGHT}
-*/
-
-`;
-    }
 
     function getAchievementsAPIBanner() {
         return `/*
@@ -87,21 +67,6 @@ module.exports = function (grunt) {
     }
 
     grunt.initConfig({
-        concat: {
-            guideAPI: {
-                options: {
-                    banner: getGuideAPIBanner(),
-                },
-                src: [
-                    `${GUIDE_API}header.js`,
-                    `${GUIDE_API}GuideAPI.js`,
-                    `${GUIDE_API}GuideHelper.js`,
-                    `${GUIDE_API}PageControllers.js`,
-                ],
-                dest: 'libs/GuideAPI.js',
-            }
-        },
-
         ts: {
             tests: {
                 tsconfig: "dev/tsconfig.json"
@@ -147,12 +112,10 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-move');
     grunt.loadNpmTasks('grunt-file-creator');
     grunt.registerTask('generateBanners', ['file-creator:generateBanners']);
-    grunt.registerTask('guide-api', ['concat:guideAPI']);
     grunt.registerTask('achievements-api', ['ts:achievementsAPI', 'move:declarations']);
     grunt.registerTask('backpack-api', ['ts:backpackAPI', 'move:declarations']);
     grunt.registerTask('baubles-api', ['ts:baublesAPI', 'move:declarations']);
