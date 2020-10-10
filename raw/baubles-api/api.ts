@@ -42,6 +42,24 @@ class Baubles {
     static setupServerSide() {
         Network.addServerPacket("baubles.open_ui",
             (client) => this.openGuiFor(client));
+
+        Network.getServer()
+            .addOnClientConnectedListener((client) => {
+                const data = Baubles.getDataFor(client.getPlayerUid());
+                if (!data) {
+                    return;
+                }
+
+                const cache = data.cache;
+                for (let slot in cache) {
+                    const desc = Baubles.getDesc(cache[slot]);
+                    if (!desc) {
+                        continue;
+                    }
+
+                    desc.onEquip(client, data.container, slot);
+                }
+            });
     }
 
     static setupContainer(playerUid: number, container: ItemContainer = new ItemContainer()) {
@@ -86,9 +104,13 @@ class Baubles {
 
     static tick() {
         for (const uid in Baubles.data) {
-            let data = Baubles.data[uid];
-            const cache = data.cache;
             const client = Network.getClientForPlayer(parseInt(uid));
+            if (!client) {
+                continue;
+            }
+
+            const data = Baubles.data[uid];
+            const cache = data.cache;
             for (const slot in cache) {
                 Baubles.getDesc(cache[slot])
                     ?.tick(client, data.container, slot);
@@ -135,27 +157,15 @@ Callback.addCallback("tick", () => Baubles.tick());
 
 Callback.addCallback("LevelLeft", () => Baubles.reset());
 
-Callback.addCallback("LevelLoaded", () => {
-    const data = Baubles.data;
-    for (let uid in data) {
-        const client = Network.getClientForPlayer(parseInt(uid));
-        const datum = data[uid];
-        const cache = datum.cache;
-        for (let slot in cache) {
-            const desc = Baubles.getDesc(cache[slot]);
-            if (!desc) {
-                continue;
-            }
-
-            desc.onEquip(client, datum.container, slot);
-        }
-    }
-});
-
 Callback.addCallback("EntityDeath", (entity: number) => {
     if (Entity.getType(entity) === 1) { //player
         const data = Baubles.getDataFor(entity);
         if (!data) {
+            return;
+        }
+
+        const client = Network.getClientForPlayer(entity);
+        if (!client) {
             return;
         }
 
@@ -165,7 +175,7 @@ Callback.addCallback("EntityDeath", (entity: number) => {
         for (let i in data.cache) {
             const bauble = data.cache[i];
             if (bauble.onTakeOff) {
-                bauble.onTakeOff(Network.getClientForPlayer(entity), data.container, i);
+                bauble.onTakeOff(client, data.container, i);
             }
             container.dropSlot(blockSource, i, pos.x, pos.y, pos.z);
         }
