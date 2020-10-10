@@ -6,7 +6,7 @@ class BackpackRegistry {
     /**
      * Containers of backpacks. Key is 'dIdentifier'. For example, 'd1'.
      */
-    static containers: { [key: string]: UI.Container } = {};
+    static containers: { [key: string]: ItemContainer } = {};
     /**
      * Object that store prototypes of backpacks. Key is backpack id.
      */
@@ -35,10 +35,6 @@ class BackpackRegistry {
         prototype.slotsCenter = prototype.slotsCenter ?? true;
 
         let slots = prototype.slots;
-        let isValidFunc = prototype.isValidItem || function (id, count, data) {
-            return !BackpackRegistry.isBackpack(id) &&
-                (prototype.items ? BackpackRegistry.isValidFor(id, data, prototype.items) : true);
-        };
 
         if (!prototype.gui) {
             if (slots <= 0) {
@@ -65,18 +61,45 @@ class BackpackRegistry {
                 elements: {}
             });
 
-            BackpackRegistry.addSlotsToGui(prototype.gui, slots, isValidFunc, prototype.inRow, prototype.slotsCenter);
+            BackpackRegistry.addSlotsToGui(prototype.gui, slots, prototype.inRow, prototype.slotsCenter);
         }
 
-        Item.registerUseFunctionForID(id, function (coords, item) {
-            BackpackRegistry.openGuiFor(item);
+        Item.registerUseFunctionForID(id, function (coords, item, block, player) {
+            BackpackRegistry.openGuiFor(item, player);
         });
 
-        Item.registerNoTargetUseFunction(id, function (item) {
-            BackpackRegistry.openGuiFor(item);
+        Item.registerNoTargetUseFunction(id, function (item, player) {
+            BackpackRegistry.openGuiFor(item, player);
         });
 
         this.prototypes[id] = prototype;
+    }
+
+    static setupClientSide() {
+        ItemContainer.registerScreenFactory("backpack_api.ui", (container, name) => {
+            const prototype = this.prototypes[parseInt(name)];
+            if (prototype) {
+                return prototype.gui;
+            }
+
+            return null;
+        });
+    }
+
+    static setupContainer(proto: IBackpackPrototype, container: ItemContainer) {
+        container.setClientContainerTypeName("backpack_api.ui");
+
+        const isValidFunc = proto.isValidItem || function (id, count, data) {
+            return !BackpackRegistry.isBackpack(id) &&
+                (proto.items ? BackpackRegistry.isValidFor(id, data, proto.items) : true);
+        };
+        // for (let i = 0; i < proto.slots; i++) {
+        container.setGlobalAddTransferPolicy((container, name, id, amount, data) => {
+            return isValidFunc(id, amount, data) ? Math.min(amount, Item.getMaxStack(id) - container.getSlot(name).count) : 0;
+        });
+        // }
+
+        return container;
     }
 
     /**
@@ -138,23 +161,24 @@ class BackpackRegistry {
     /**
      * Open backpack gui.
      * @param item - item
-     * @param notUpdateData - If false and no container has been created for the passed data, a new item will be set
-     * in the player’s hand
+     * @param player - player entity id
      * @returns backpack data. Can return a value other than passed one.
      */
-    static openGuiFor(item: ItemInstance, notUpdateData?: boolean): number | null {
-        let prototype = this.prototypes[item.id];
+    static openGuiFor(item: ItemInstance, player: number): number | null {
+        const client = Network.getClientForPlayer(player);
+        if (!client) {
+            return;
+        }
 
+        let prototype = this.prototypes[item.id];
         if (prototype) {
             let key: string;
-            let container: UI.Container | undefined | null;
+            let container: ItemContainer | undefined | null;
             switch (prototype.kind) {
                 case BackpackKind.META:
                     if (!item.data) {
                         item.data = BackpackRegistry.nextUnique++;
-                        if (!notUpdateData) {
-                            Player.setCarriedItem(item.id, item.count, item.data);
-                        }
+                        Player.setCarriedItem(item.id, item.count, item.data);
                     }
 
                     key = "d" + item.data;
@@ -169,9 +193,7 @@ class BackpackRegistry {
                     if (data === -1) {
                         data = BackpackRegistry.nextUnique++;
                         (item.extra as ItemExtra).putInt("__backpack_id", data);
-                        if (!notUpdateData) {
-                            Player.setCarriedItem(item.id, item.count, item.data, item.extra);
-                        }
+                        Player.setCarriedItem(item.id, item.count, item.data, item.extra);
                     }
 
                     key = "d" + data;
@@ -180,11 +202,12 @@ class BackpackRegistry {
             }
 
             if (!container) {
-                container = new UI.Container();
+                container = new ItemContainer();
                 this.containers[key] = container;
             }
 
-            container.openAs(prototype.gui);
+            container = this.setupContainer(BackpackRegistry.prototypes[item.id], container); //TODO: add condition
+            container.openFor(client, item.id + "");
             return item.data;
         }
 
@@ -205,7 +228,6 @@ class BackpackRegistry {
      * Helper function for adding items to the gui.
      * @param gui - gui to which slots will be added
      * @param slots - amount of slots
-     * @param isValidFunc - validation function
      * @param inRow - Amount of slots in one row
      * @param center - Do the slots center?
      * @param x - Initial x coordinate. Ignored if the center argument is true
@@ -214,7 +236,6 @@ class BackpackRegistry {
      */
     static addSlotsToGui(gui: UI.Window | UI.WindowGroup,
                          slots: number,
-                         isValidFunc: T_ValidationFunc,
                          inRow: number,
                          center: boolean,
                          x = 345,
@@ -226,8 +247,7 @@ class BackpackRegistry {
             content.elements["slot" + (i + 1)] = {
                 type: "slot",
                 x: x + i % inRow * 61,
-                y: y + Math.floor(i / inRow) * 61,
-                isValid: isValidFunc
+                y: y + Math.floor(i / inRow) * 61
             };
         }
 
@@ -236,6 +256,8 @@ class BackpackRegistry {
 }
 
 EXPORT("BackpackRegistry", BackpackRegistry);
+
+BackpackRegistry.setupClientSide();
 
 Callback.addCallback("LevelLoaded", function () {
     for (let id in BackpackRegistry.prototypes) {
