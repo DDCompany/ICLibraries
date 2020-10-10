@@ -42,24 +42,6 @@ class Baubles {
     static setupServerSide() {
         Network.addServerPacket("baubles.open_ui",
             (client) => this.openGuiFor(client));
-
-        Network.getServer()
-            .addOnClientConnectedListener((client) => {
-                const data = Baubles.getDataFor(client.getPlayerUid());
-                if (!data) {
-                    return;
-                }
-
-                const cache = data.cache;
-                for (let slot in cache) {
-                    const desc = Baubles.getDesc(cache[slot]);
-                    if (!desc) {
-                        continue;
-                    }
-
-                    desc.onEquip(client, data.container, slot);
-                }
-            });
     }
 
     static setupContainer(playerUid: number, container: ItemContainer = new ItemContainer()) {
@@ -179,6 +161,28 @@ Callback.addCallback("EntityDeath", (entity: number) => {
             }
             container.dropSlot(blockSource, i, pos.x, pos.y, pos.z);
         }
+    }
+});
+
+Callback.addCallback("ServerPlayerLoaded", (player: number) => {
+    const client = Network.getClientForPlayer(player);
+    if (!client) {
+        return;
+    }
+
+    const data = Baubles.getDataFor(client.getPlayerUid());
+    if (!data) {
+        return;
+    }
+
+    const cache = data.cache;
+    for (let slot in cache) {
+        const desc = Baubles.getDesc(cache[slot]);
+        if (!desc) {
+            continue;
+        }
+
+        desc.onEquip(client, data.container, slot);
     }
 });
 
