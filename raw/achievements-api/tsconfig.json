@@ -12,6 +12,7 @@
     "translation.ts",
     "popup/IAchievementPopup.ts",
     "popup/AchievementPopup.ts",
+    "achievements/AchievementsUI.ts",
     "achievements/AchievementType.ts",
     "achievements/IAchievementParent.ts",
     "achievements/IAchievementData.ts",
