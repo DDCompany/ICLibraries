@@ -2,7 +2,7 @@ interface IAchievementGroup {
     /**
      * Unique string identifier of the group
      */
-    unique: string;
+    uid: string;
 
     /**
      * Name of the group

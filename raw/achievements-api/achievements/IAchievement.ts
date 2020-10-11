@@ -13,7 +13,7 @@ interface IAchievement {
     /**
      * Unique identifier
      */
-    unique: string;
+    uid: string;
 
     /**
      * Name of the achievement
@@ -54,7 +54,7 @@ interface IAchievement {
      * If true, the achievements will not be displayed until parent achievement is not completed
      * @default <i>false</i>
      */
-    strongDependence?: boolean;
+    hidden?: boolean;
 
     /**
      * Affects on the texture of frame and the popup title. To create custom, you need to create 'achievements_bg'
@@ -73,14 +73,14 @@ interface IAchievement {
 
     /**
      * Do not show popup when achievement completed?
-     * @default <i>false</i>
+     * @default <i>true</i>
      */
-    notCompletePopup?: boolean;
+    showPopup?: boolean;
 
     /**
      * Achievement icon
      */
-    item?: number | IItemIcon;
+    icon?: number | IItemIcon;
 
     /**
      * Specifies the sides to which the connection will be connected
@@ -90,9 +90,7 @@ interface IAchievement {
 }
 
 interface IConvertedAchievement extends IAchievement {
-    name: string
-    description: string
-    item?: IItemIcon
+    icon?: IItemIcon
 }
 
 EXPORT("Connection", Connection);

@@ -17,9 +17,9 @@ class Achievement {
                 this.findParent(parts.length > 1 ? parts[0] : undefined, parts.length > 1 ? parts[1] : parts[0]);
         }
 
-        if (typeof _description.item === "number") {
-            _description.item = {
-                id: _description.item
+        if (typeof _description.icon === "number") {
+            _description.icon = {
+                id: _description.icon
             };
         }
 
@@ -42,7 +42,7 @@ class Achievement {
             return;
         }
 
-        if (!this._description.notCompletePopup) {
+        if (this._description.showPopup !== false) {
             let item = this.icon;
             let title;
             let color;
@@ -165,7 +165,7 @@ class Achievement {
     }
 
     get strongDependence() {
-        return this._description.strongDependence;
+        return this._description.hidden;
     }
 
     get parent() {
@@ -173,7 +173,7 @@ class Achievement {
     }
 
     get uid(): string {
-        return this._description.unique;
+        return this._description.uid;
     }
 
     get description() {
@@ -181,7 +181,7 @@ class Achievement {
     }
 
     get icon() {
-        return this._description.item;
+        return this._description.icon;
     }
 
     get group() {

@@ -3,7 +3,7 @@ import ItemUseCoordinates = Callback.ItemUseCoordinates;
 IMPORT("AchievementsAPI");
 
 AchievementAPI.registerGroup({
-    unique: "world_of_colors",
+    uid: "world_of_colors",
     name: "achievements.world_of_colors",
     background: "groups_bg.husbandry",
     icon: {
@@ -14,14 +14,14 @@ AchievementAPI.registerGroup({
 
 AchievementAPI.registerAll("world_of_colors", [
     {
-        unique: "welcome",
+        uid: "welcome",
         column: 0,
         row: 0,
         name: "achievements.world_of_colors.welcome",
-        item: VanillaItemID.ender_pearl
+        icon: VanillaItemID.ender_pearl
     },
     {
-        unique: `glass`,
+        uid: `glass`,
         type: AchievementType.goal,
         column: 1,
         row: 3,
@@ -30,20 +30,20 @@ AchievementAPI.registerAll("world_of_colors", [
         description: "achievements.world_of_colors.glass_desc",
         progressMax: 16,
         connection: Connection.VERTICAL,
-        item: VanillaBlockID.stained_glass
+        icon: VanillaBlockID.stained_glass
     }
 ]);
 
 for (let i = 0; i < 16; i++) {
     AchievementAPI.register("world_of_colors", {
-        unique: `wool${i}`,
+        uid: `wool${i}`,
         column: 1 + i % 6,
         row: Math.floor(i / 6),
         parent: "welcome",
         name: `achievements.world_of_colors.wool`,
         description: "achievements.world_of_colors.wool_desc",
         connection: Connection.VERTICAL,
-        item: {
+        icon: {
             id: VanillaBlockID.wool,
             data: i
         }

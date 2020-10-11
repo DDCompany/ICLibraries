@@ -16,7 +16,7 @@ class AchievementAPI {
         }
 
         this.groups[group.uid] = group;
-        AchievementsUI.groupNames.push(description.unique);
+        AchievementsUI.groupNames.push(description.uid);
         return group;
     }
 

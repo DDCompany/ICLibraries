@@ -2,7 +2,7 @@ class AchievementGroup {
     private readonly _children: Dictionary<Achievement> = {};
 
     constructor(private _description: IAchievementGroup) {
-        if (!_description.unique) {
+        if (!_description.uid) {
             throw new IllegalArgumentException("Invalid uid");
         }
 
@@ -43,7 +43,7 @@ class AchievementGroup {
     }
 
     get uid() {
-        return this._description.unique;
+        return this._description.uid;
     }
 
     get children() {
