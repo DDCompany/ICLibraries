@@ -12,21 +12,9 @@ class Achievement {
     constructor(private _group: AchievementGroup, _description: IAchievement) {
         const parent = _description.parent;
         if (parent) {
-            if (typeof parent === "string") {
-                const parts = parent.split(":");
-                this._parent =
-                    this.findParent(parts.length > 1 ? parts[0] : undefined, parts.length > 1 ? parts[1] : parts[0]);
-            } else {
-                this._parent = this.findParent(parent.groupUnique || _group.uid, parent.unique);
-            }
-        }
-
-        if (typeof _description.name === "object") {
-            _description.name = _description.name.translate || _description.name.text;
-        }
-
-        if (typeof _description.description === "object") {
-            _description.description = _description.description.translate || _description.description.text;
+            const parts = parent.split(":");
+            this._parent =
+                this.findParent(parts.length > 1 ? parts[0] : undefined, parts.length > 1 ? parts[1] : parts[0]);
         }
 
         if (typeof _description.item === "number") {

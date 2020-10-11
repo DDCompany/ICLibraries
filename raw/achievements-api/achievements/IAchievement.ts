@@ -18,12 +18,12 @@ interface IAchievement {
     /**
      * Name of the achievement
      */
-    name?: string | ITranslatable;
+    name?: string;
 
     /**
      * Description of the achievement
      */
-    description?: string | ITranslatable;
+    description?: string;
 
     /**
      * Set the column in which the achievement will be located
@@ -48,7 +48,7 @@ interface IAchievement {
     /**
      * Parent achievement. If contains in the current group, the achievements will be connected by a line
      */
-    parent?: string | IAchievementParent;
+    parent?: string;
 
     /**
      * If true, the achievements will not be displayed until parent achievement is not completed

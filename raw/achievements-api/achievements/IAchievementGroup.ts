@@ -36,11 +36,6 @@ interface IAchievementGroup {
     background?: string;
 
     /**
-     * @deprecated
-     */
-    bgTexture?: string;
-
-    /**
      * Group icon
      */
     icon?: number | IItemIcon

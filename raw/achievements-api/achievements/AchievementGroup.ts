@@ -75,6 +75,6 @@ class AchievementGroup {
     }
 
     get backgroundTexture() {
-        return this._description.background || this._description.bgTexture;
+        return this._description.background;
     }
 }
