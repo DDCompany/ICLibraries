@@ -342,16 +342,10 @@ class AchievementsUI {
         }
     }
 
-    /**
-     * @deprecated
-     */
     static getAchievementY(achievement: IAchievement, size: number): number {
         return achievement.y || achievement.row * (size + 10);
     }
 
-    /**
-     * @deprecated
-     */
     static getAchievementX(achievement: IAchievement, size: number): number {
         return achievement.x || achievement.column * (size + 10);
     }
@@ -359,8 +353,6 @@ class AchievementsUI {
 
 AchievementsUI.init();
 
-Callback.addCallback("PostLoaded", () =>
-    AchievementsUI.groupNames = Object.keys(AchievementAPI.groups));
 Callback.addCallback("NativeGuiChanged", (screenName: string) => {
     if (screenName === "hud_screen" || screenName === "in_game_play_screen") {
         AchievementsUI.containerOverlay.openAs(AchievementsUI.groupsShowUI);
