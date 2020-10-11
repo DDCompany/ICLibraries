@@ -5,12 +5,12 @@ Callback.addCallback("NativeCommand", (str: string) => {
     if (parts[0] === "ach" || parts[0] === "achievement") {
         switch (parts[1]) {
             case "giveAll":
-                AchievementAPI.giveAll();
+                AchievementAPI.giveAll(Network.getClientForPlayer(Player.get()));
                 Game.message("[AchievementAPI] All achievements was gave");
                 Game.prevent();
                 return;
             case "give":
-                if (!parts[2] || !AchievementAPI.giveAllForGroup(AchievementAPI.groups[parts[2]].description)) {
+                if (!parts[2] || !AchievementAPI.giveAllForGroup(Network.getClientForPlayer(Player.get()), AchievementAPI.groups[parts[2]].description)) {
                     return;
                 }
 

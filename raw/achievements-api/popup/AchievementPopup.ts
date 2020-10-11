@@ -78,6 +78,7 @@ class AchievementPopup {
      * Initialize the window
      */
     static init() {
+        this.setupClientSide();
         this.popupUI.setAsGameOverlay(true);
     }
 
@@ -89,17 +90,25 @@ class AchievementPopup {
         this.popupQueue.push(popup);
     }
 
+    static showFor(client: ConnectedClient, popup: IAchievementPopup) {
+        client.send("achievements_api.show_popup", popup);
+    }
+
     /**
      * @return last popup in queue
      */
     static popQueue(): Nullable<IAchievementPopup> {
         return this.popupQueue.pop() || null;
     }
+
+    static setupClientSide() {
+        Network.addClientPacket("achievements_api.show_popup", (popup: IAchievementPopup) => this.show(popup));
+    }
 }
 
 AchievementPopup.init();
 
-Callback.addCallback("tick", () => {
+Callback.addCallback("LocalTick", () => {
     if (!AchievementPopup.delay) {
         let popup = AchievementPopup.popQueue();
 

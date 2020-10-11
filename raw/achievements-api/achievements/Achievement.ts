@@ -1,14 +1,11 @@
 interface IFullData {
+    completed: boolean
     progress: number
-    data: Dictionary<any>
+    custom: Dictionary<any>
 }
 
 class Achievement {
-    private completed = false;
-    private _data: IFullData = {
-        progress: 0, //TODO: move to another field when AchievementAPI.getData will removed
-        data: {}
-    };
+    private _dataFor: { [key: number]: IFullData } = {};
     private readonly _parent: Nullable<Achievement>;
     private readonly _description: IConvertedAchievement;
 
@@ -42,16 +39,18 @@ class Achievement {
         this._description = _description as IConvertedAchievement;
     }
 
-    give() {
-        if (this.isCompleted) {
+    give(player: number) {
+        const client = Network.getClientForPlayer(player);
+        if (this.isCompleted(client.getPlayerUid())) {
             return;
         }
 
-        if (this._parent && !this._parent.isCompleted) {
-            return; //Throw an exception? Hm...
+        if (this._parent && !this._parent.isCompleted(client.getPlayerUid())) {
+            return;
         }
 
-        if (this._description.progressMax && ++this._data.progress < this._description.progressMax) {
+        const data = this.getData(player);
+        if (this._description.progressMax && ++data.progress < this._description.progressMax) {
             return;
         }
 
@@ -74,7 +73,7 @@ class Achievement {
                     color = android.graphics.Color.YELLOW;
             }
 
-            AchievementPopup.show({
+            AchievementPopup.showFor(client, {
                 title: title,
                 color: color,
                 description: Translation.translate(this._description.name) || "",
@@ -86,32 +85,71 @@ class Achievement {
             });
         }
 
-        this.completed = true;
+        this.setCompleted(player, true);
         Callback.invokeCallback("onAchieve", this._group.description, this.description);
         Callback.invokeCallback("onAchievementCompleted", this);
     }
 
     reset() {
-        this.completed = false;
-        this._data.progress = 0;
-        this._data.data = {};
+        this._dataFor = {};
+    }
+
+    setCompleted(player: number, value: boolean) {
+        this.getFullData(player).completed = value;
+    }
+
+    getData(player: number) {
+        return this.getFullData(player).custom;
+    }
+
+    getFullData(player: number) {
+        let data = this._dataFor[player];
+        if (!data) {
+            data = {
+                completed: false,
+                progress: 0,
+                custom: {}
+            };
+            this._dataFor[player] = data;
+        }
+
+        return data;
+    }
+
+    setFullData(player: number, data: IFullData) {
+        this._dataFor[player] = data;
     }
 
     /**
-     * Show alert with information about achievement
+     * @return Is the achievement completed?
      */
-    showAlert() {
-        let info = Translation.translate(this._description.name);
+    isCompleted(player: number) {
+        return this.getFullData(player).completed;
+    }
 
-        if (this._description.progressMax) {
-            info += `(${this.progress}/${this._description.progressMax})`;
+    /**
+     * @return Is the achievement unlocked?
+     */
+    isUnlocked(player: number) {
+        return this._parent ? this._parent.isCompleted(player) : true;
+    }
+
+    getTexture(player: number) {
+        let type;
+
+        if (this.isCompleted(player)) {
+            type = "completed";
+        } else if (this.isUnlocked(player)) {
+            type = "unlocked";
+        } else {
+            type = "locked";
         }
 
-        if (this._description.description) {
-            info += "\n" + Translation.translate(this._description.description);
-        }
+        return "achievement_bg." + (this._description.type || "default") + "_" + type;
+    }
 
-        alert(info);
+    progress(player: number): number {
+        return this.getData(player).progress;
     }
 
     private findParent(groupUID: Nullable<string>, uid: string) {
@@ -134,48 +172,16 @@ class Achievement {
         }
     }
 
-    /**
-     * @return Is the achievement unlocked?
-     */
-    get isUnlocked() {
-        return this._parent ? this._parent.isCompleted : true;
-    }
-
-    /**
-     * @return Is the achievement completed?
-     */
-    get isCompleted() {
-        return this.completed;
-    }
-
-    set isCompleted(value: boolean) {
-        this.completed = value;
+    get allData() {
+        return this._dataFor;
     }
 
     get strongDependence() {
         return this._description.strongDependence;
     }
 
-    get texture() {
-        let type;
-
-        if (this.isCompleted) {
-            type = "completed";
-        } else if (this.isUnlocked) {
-            type = "unlocked";
-        } else {
-            type = "locked";
-        }
-
-        return "achievement_bg." + (this._description.type || "default") + "_" + type;
-    }
-
     get parent() {
         return this._parent;
-    }
-
-    get progress(): number {
-        return this._data.progress;
     }
 
     get uid(): string {
@@ -186,23 +192,11 @@ class Achievement {
         return this._description;
     }
 
-    get fullData() {
-        return this._data;
-    }
-
-    set fullData(value: IAchievementData) {
-        this._data = value;
-    }
-
     get icon() {
         return this._description.item;
     }
 
     get group() {
         return this._group;
-    }
-
-    get data() {
-        return this._data.data;
     }
 }

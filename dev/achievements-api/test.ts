@@ -57,23 +57,24 @@ Translation.addTranslation("achievements.world_of_colors.wool_desc", {en: "Place
 Translation.addTranslation("achievements.world_of_colors.glass", {en: "Glass"});
 Translation.addTranslation("achievements.world_of_colors.glass_desc", {en: "Place all colors of Glass"});
 
-Callback.addCallback("LevelLoaded", () =>
-    AchievementAPI.give("world_of_colors", "welcome"));
 
-Callback.addCallback("ItemUse", (coords: ItemUseCoordinates, item: ItemInstance) => {
+Callback.addCallback("ServerPlayerLoaded", (player: number) =>
+    AchievementAPI.give(player, "world_of_colors", "welcome"));
+
+Callback.addCallback("ItemUse", (coords: ItemUseCoordinates, item: ItemInstance, block: any, isExternal: any, player: number) => {
     switch (item.id) {
         case VanillaBlockID.wool:
-            AchievementAPI.give("world_of_colors", `wool${item.data}`);
+            AchievementAPI.give(player, "world_of_colors", `wool${item.data}`);
             break;
         case VanillaBlockID.stained_glass:
             const achievement =
                 AchievementAPI
                     .getGroup("world_of_colors")
                     .getChild("glass");
-            const data = achievement.data;
+            const data = achievement.getData(player);
             if (!data[item.data]) {
                 data[item.data] = true;
-                achievement.give();
+                achievement.give(player);
             }
             break;
     }

@@ -1,51 +1,75 @@
 interface ISavedAchievement {
-    completed: boolean
-    data: IAchievementData
+    [key: string]: IFullData //player uid
 }
 
 interface IAchievementsSaver {
-    [key: string]: Dictionary<ISavedAchievement>
+    data: Dictionary<Dictionary<ISavedAchievement>>
+    _format: number
 }
 
 Saver.addSavesScope("AchievementsScope",
     function read(scope: IAchievementsSaver) {
-        for (let groupKey in scope) {
-            const group = AchievementAPI.getGroup(groupKey);
-            const data = scope[groupKey];
-            if (group) {
+        let groups: IAchievementsSaver["data"] = {};
+        if (!scope._format) {
+            Logger.Log("Old saves detected. Converting...", LOG_TAG);
+            for (let groupKey in scope) {
+                const group: Dictionary<ISavedAchievement> = {};
+                // @ts-ignore
+                const data = scope[groupKey];
+
                 for (let key in data) {
-                    const child = group.getChild(key);
-                    const saved = data[key];
-                    if (child) {
-                        child.isCompleted = saved.completed;
-                        child.fullData = saved.data;
-                    } else {
-                        Logger.Log(`Achievement with uid '${key}' not found. Skipping...`, "WARNING");
-                    }
+                    group[key] = {
+                        [Player.get() + ""]: data[key]
+                    };
                 }
-            } else {
+
+                groups[groupKey] = group;
+            }
+        } else {
+            groups = scope.data;
+        }
+
+        for (let groupKey in groups) {
+            const group = AchievementAPI.getGroup(groupKey);
+            if (!group) {
                 Logger.Log(`Group with uid '${groupKey}' not found. Skipping...`, "WARNING");
+                continue;
+            }
+
+            const data = groups[groupKey];
+            for (let achievementKey in data) {
+                const child = group.getChild(achievementKey);
+                if (!child) {
+                    Logger.Log(`Achievement with uid '${achievementKey}' not found. Skipping...`, "WARNING");
+                    continue;
+                }
+
+                const achievementData = data[achievementKey];
+                for (let uid in achievementData) {
+                    child.setFullData(+uid, achievementData[uid]);
+                }
             }
         }
     },
 
     function save() {
-        const data: IAchievementsSaver = {};
+        const data: IAchievementsSaver["data"] = {};
 
         for (let groupKey in AchievementAPI.groups) {
             const group = AchievementAPI.groups[groupKey];
-            const _data: Dictionary<ISavedAchievement> = {};
+            const saved: Dictionary<ISavedAchievement> = {};
 
-            for (let key in group.children) {
-                const child = group.getChild(key);
-                _data[key] = {
-                    completed: child.isCompleted,
-                    data: child.fullData
-                };
+            for (let childKey in group.children) {
+                const child = group.children[childKey];
+                saved[childKey] = child.allData;
             }
-            data[groupKey] = _data;
+
+            data[groupKey] = saved;
         }
 
-        return data;
+        return {
+            data: data,
+            _format: 1
+        };
     }
 );

@@ -278,11 +278,11 @@ class AchievementAPI {
                 y: y,
                 size: size,
                 visual: true,
-                bitmap: achievement.texture,
+                bitmap: achievement.getTexture(Player.get()),
                 isTransparentBackground: true,
                 clicker: {
                     onClick() {
-                        achievement.showAlert();
+                        //TODO
                     }
                 }
             };
@@ -484,32 +484,34 @@ class AchievementAPI {
     /**
      * Give all achievements
      */
-    static giveAll() {
+    static giveAll(player: number) {
         for (let key in this.groups) {
-            this.groups[key].giveAll();
+            this.groups[key].giveAll(player);
         }
     }
 
     /**
      * @param groupUID - group identifier in which achievement contains
      * @param uid - achievement identifier
+     * @param player - player uid
      * @returns Is the achievement completed?
      */
-    static isCompleted(groupUID: string, uid: string): boolean {
-        return this.groups[groupUID].getChild(uid).isCompleted;
+    static isCompleted(groupUID: string, uid: string, player: number): boolean {
+        return this.groups[groupUID].getChild(uid).isCompleted(player);
     }
 
     /**
      * Give the achievement
+     * @param player - player uid
      * @param groupUID - group identifier
      * @param uid - achievement identifier
      */
-    static give(groupUID: string, uid: string) {
+    static give(player: number, groupUID: string, uid: string) {
         const group = this.groups[groupUID];
         if (!group) {
             throw new IllegalArgumentException(`Group with uid '${groupUID}' not found`);
         }
-        group.give(uid);
+        group.give(player, uid);
     }
 
     static resetAll() {
@@ -546,69 +548,16 @@ class AchievementAPI {
         return achievement.x || achievement.column * (size + 10);
     }
 
-    //noinspection JSUnusedGlobalSymbols
     /**
      * @deprecated
      */
-    static getAchievementTexture(groupDesc: IAchievementGroup, achievement: IAchievement): string {
-        const group = this.groups[groupDesc.unique];
-        if (!group) {
-            throw new IllegalArgumentException("Invalid group uid");
-        }
-
-        const child = group.getChild(achievement.unique);
-        if (!child) {
-            throw new IllegalArgumentException("Invalid achievement uid");
-        }
-
-        return child.texture;
-    }
-
-    /**
-     * @deprecated
-     */
-    static getData(groupUID: string, uid: string): IAchievementData {
-        const group = this.groups[groupUID];
-        if (!group) {
-            throw new IllegalArgumentException("Invalid group uid");
-        }
-
-        const child = group.getChild(uid);
-        if (!child) {
-            throw new IllegalArgumentException("Invalid achievement uid");
-        }
-
-        return child.fullData;
-    }
-
-    //noinspection JSUnusedGlobalSymbols
-    /**
-     * @deprecated
-     */
-    static showAchievementInfo(groupDescription: IAchievementGroup, achievement: IAchievement) {
-        const group = this.groups[groupDescription.unique];
-        if (!group) {
-            return;
-        }
-
-        const child = group.getChild(achievement.unique);
-        if (!child) {
-            return;
-        }
-
-        child.showAlert();
-    }
-
-    /**
-     * @deprecated
-     */
-    static giveAllForGroup(description: IAchievementGroup) {
+    static giveAllForGroup(player: number, description: IAchievementGroup) {
         const group = this.groups[description.unique];
         if (!group) {
             return false;
         }
 
-        group.giveAll();
+        group.giveAll(player);
         return true;
     }
 

@@ -6,3 +6,4 @@ LIBRARY({
 });
 
 const IllegalArgumentException = java.lang.IllegalArgumentException;
+const LOG_TAG = "ACHIEVEMENTS-API";
