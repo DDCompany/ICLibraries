@@ -77,7 +77,7 @@ class BackpackRegistry {
 
     static setupClientSide() {
         ItemContainer.registerScreenFactory("backpack_api.ui", (container, name) => {
-            const prototype = this.prototypes[parseInt(name)];
+            const prototype = this.prototypes[Network.serverToLocalId(parseInt(name))];
             if (prototype) {
                 return prototype.gui;
             }
