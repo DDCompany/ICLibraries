@@ -145,39 +145,6 @@ class AchievementAPI {
     static getGroup(uid: string): Nullable<AchievementGroup> {
         return this.groups[uid] || null;
     }
-
-    /*
-        {                                 }
-        {           DEPRECATED            }
-        {                                 }
-     */
-
-    /**
-     * @deprecated
-     */
-    static giveAllForGroup(player: number, description: IAchievementGroup) {
-        const group = this.groups[description.unique];
-        if (!group) {
-            return false;
-        }
-
-        group.giveAll(player);
-        return true;
-    }
-
-    //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
-    /**
-     * @deprecated
-     */
-    static removeDataFor(groupUID: string, uid: string) {
-    }
-
-    /**
-     * @deprecated
-     */
-    static getProgress(group: IAchievementGroup, achievement: IAchievement) {
-        return this.groups[group.unique].getChild(achievement.unique).progress;
-    }
 }
 
 Callback.addCallback("LevelLeft", () => AchievementAPI.resetAll());

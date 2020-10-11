@@ -9,14 +9,10 @@ Callback.addCallback("NativeCommand", (str: string) => {
                 Game.message("[AchievementAPI] All achievements was gave");
                 Game.prevent();
                 return;
-            case "give":
-                if (!parts[2] || !AchievementAPI.giveAllForGroup(Network.getClientForPlayer(Player.get()), AchievementAPI.groups[parts[2]].description)) {
-                    return;
-                }
-
-                Game.message("[AchievementAPI] Achievements was gave!");
-                Game.prevent();
-                return;
+            // case "give":
+            //     if (!parts[2] || !AchievementAPI.giveAllForGroup(Network.getClientForPlayer(Player.get()),
+            // AchievementAPI.groups[parts[2]].description)) { return; }  Game.message("[AchievementAPI] Achievements
+            // was gave!"); Game.prevent(); return;
             case "consumeAll":
                 AchievementAPI.resetAll();
                 Game.message("[AchievementAPI] All achievements was consumed");
