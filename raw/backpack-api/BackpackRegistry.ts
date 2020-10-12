@@ -186,10 +186,16 @@ class BackpackRegistry {
                         item.extra = new ItemExtraData();
                     }
 
-                    let data = (item.extra as ItemExtra).getInt("__backpack_id", -1);
+                    let data = item.extra.getInt("container", -1); //For backward compatibility
+                    if (data !== -1) {
+                        item.extra.putInt("__backpack_id", data);
+                        item.extra.putInt("container", -1);
+                    }
+
+                    data = item.extra.getInt("__backpack_id", -1);
                     if (data === -1) {
                         data = BackpackRegistry.nextUnique++;
-                        (item.extra as ItemExtra).putInt("__backpack_id", data);
+                        item.extra.putInt("__backpack_id", data);
                         Player.setCarriedItem(item.id, item.count, item.data, item.extra);
                     }
 
@@ -258,7 +264,7 @@ EXPORT("BackpackRegistry", BackpackRegistry);
 
 BackpackRegistry.setupClientSide();
 
-Callback.addCallback("LevelLoaded", function () {
+Callback.addCallback("ServerPlayerLoaded", function () {
     for (let id in BackpackRegistry.prototypes) {
         let prototype = BackpackRegistry.prototypes[id];
         if (!prototype.title) {

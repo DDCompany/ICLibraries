@@ -14,7 +14,7 @@ Saver.addSavesScope("BackpacksScope",
             const oldContainers: { [key: string]: UI.Container } = scope.containers;
             const containers: { [key: string]: ItemContainer } = {};
             for (let key in oldContainers) {
-                containers[key] = new ItemContainer(oldContainers[key]);
+                containers[key[0] === "e" ? key = "d" + key.substr(1) : key] = new ItemContainer(oldContainers[key]);
             }
             BackpackRegistry.containers = containers;
         } else {
