@@ -93,13 +93,10 @@ class BackpackRegistry {
             return !BackpackRegistry.isBackpack(id) &&
                 (proto.items ? BackpackRegistry.isValidFor(id, data, proto.items) : true);
         };
-        // for (let i = 0; i < proto.slots; i++) {
+
         container.setGlobalAddTransferPolicy((container, name, id, amount, data) => {
             return isValidFunc(id, amount, data) ? Math.min(amount, Item.getMaxStack(id) - container.getSlot(name).count) : 0;
         });
-        // }
-
-        return container;
     }
 
     /**
@@ -206,7 +203,9 @@ class BackpackRegistry {
                 this.containers[key] = container;
             }
 
-            container = this.setupContainer(BackpackRegistry.prototypes[item.id], container); //TODO: add condition
+            if (!container.getClientContainerTypeName()) {
+                this.setupContainer(BackpackRegistry.prototypes[item.id], container);
+            }
             container.openFor(client, item.id + "");
             return item.data;
         }
