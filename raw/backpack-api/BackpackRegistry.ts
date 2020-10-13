@@ -29,7 +29,7 @@ class BackpackRegistry {
         }
 
         prototype.title = prototype.title ?? "Backpack";
-        prototype.kind = prototype.kind ?? BackpackKind.META;
+        prototype.kind = prototype.useExtraData ? BackpackKind.EXTRA : (prototype.kind ?? BackpackKind.META);
         prototype.slots = prototype.slots ?? 10;
         prototype.inRow = prototype.inRow ?? prototype.slots;
         prototype.slotsCenter = prototype.slotsCenter ?? true;
