@@ -74,27 +74,18 @@ class BackpackRegistry {
     }
 
     static setupClientSide() {
-        ItemContainer.registerScreenFactory("backpack_api.ui", (container, name) => {
-            const prototype = this.prototypes[Network.serverToLocalId(parseInt(name))];
-            if (prototype) {
-                return prototype.gui;
-            }
-
-            return null;
-        });
+        ItemContainer.registerScreenFactory("backpack_api.ui",
+            (container, name) => this.prototypes[Network.serverToLocalId(parseInt(name))]?.gui);
     }
 
     static setupContainer(proto: IBackpackPrototype, container: ItemContainer) {
+        const isValidFunc = proto.isValidItem || ((id, count, data) =>
+            !BackpackRegistry.isBackpack(id)
+            && (proto.items ? BackpackRegistry.isValidFor(id, data, proto.items) : true));
+
         container.setClientContainerTypeName("backpack_api.ui");
-
-        const isValidFunc = proto.isValidItem || ((id, count, data) => {
-            return !BackpackRegistry.isBackpack(id) &&
-                (proto.items ? BackpackRegistry.isValidFor(id, data, proto.items) : true);
-        });
-
-        container.setGlobalAddTransferPolicy((container, name, id, amount, data) => {
-            return isValidFunc(id, amount, data) ? Math.min(amount, Item.getMaxStack(id) - container.getSlot(name).count) : 0;
-        });
+        container.setGlobalAddTransferPolicy((container, name, id, amount, data) =>
+            isValidFunc(id, amount, data) ? Math.min(amount, Item.getMaxStack(id) - container.getSlot(name).count) : 0);
     }
 
     /**
