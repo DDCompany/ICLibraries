@@ -175,7 +175,7 @@ class BackpackRegistry {
                 case BackpackKind.META:
                     if (!item.data) {
                         item.data = BackpackRegistry.nextUnique++;
-                        Player.setCarriedItem(item.id, item.count, item.data);
+                        Entity.setCarriedItem(player, item.id, item.count, item.data);
                     }
 
                     key = "d" + item.data;
@@ -196,7 +196,7 @@ class BackpackRegistry {
                     if (data === -1) {
                         data = BackpackRegistry.nextUnique++;
                         item.extra.putInt("__backpack_id", data);
-                        Player.setCarriedItem(item.id, item.count, item.data, item.extra);
+                        Entity.setCarriedItem(player, item.id, item.count, item.data, item.extra);
                     }
 
                     key = "d" + data;
