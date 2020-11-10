@@ -34,8 +34,7 @@ class BackpackRegistry {
         prototype.inRow = prototype.inRow ?? prototype.slots;
         prototype.slotsCenter = prototype.slotsCenter ?? true;
 
-        let slots = prototype.slots;
-
+        const slots = prototype.slots;
         if (!prototype.gui) {
             if (slots <= 0) {
                 Logger.Log("slots amount is not valid", "ERROR");
@@ -104,8 +103,8 @@ class BackpackRegistry {
                     }
                     break;
                 case "object":
-                    let rId = item.id;
-                    let rData = item.data ?? 0;
+                    const rId = item.id;
+                    const rData = item.data ?? 0;
                     let isOk = true;
 
                     switch (typeof rId) {
@@ -156,7 +155,7 @@ class BackpackRegistry {
             return;
         }
 
-        let prototype = this.prototypes[item.id];
+        const prototype = this.prototypes[item.id];
         if (prototype) {
             let key: string;
             let container: ItemContainer | undefined | null;
@@ -234,7 +233,7 @@ class BackpackRegistry {
                          center: boolean,
                          x = 345,
                          y = 70) {
-        let content = gui.getContent();
+        const content = gui.getContent();
         x = center ? 300 + (700 - inRow * 61) / 2 : x;
 
         for (let i = 0; i < slots; i++) {
@@ -255,16 +254,16 @@ BackpackRegistry.setupClientSide();
 
 Callback.addCallback("ServerPlayerLoaded", () => {
     for (let id in BackpackRegistry.prototypes) {
-        let prototype = BackpackRegistry.prototypes[id];
+        const prototype = BackpackRegistry.prototypes[id];
         if (!prototype.title) {
             continue;
         }
 
-        let gui = prototype.gui as any;
+        const gui = prototype.gui as any;
         if (gui.getWindow) {
-            let header = gui.getWindow("header");
+            const header = gui.getWindow("header");
             if (header) {
-                let drawing = header.contentProvider.drawing[2];
+                const drawing = header.contentProvider.drawing[2];
                 if (drawing) {
                     drawing.text = Translation.translate(prototype.title);
                 }
