@@ -64,13 +64,11 @@ class BackpackRegistry {
             BackpackRegistry.addSlotsToGui(prototype.gui, slots, prototype.inRow, prototype.slotsCenter);
         }
 
-        Item.registerUseFunctionForID(id, function (coords, item, block, player) {
-            BackpackRegistry.openGuiFor(item, player);
-        });
+        Item.registerUseFunctionForID(id,
+            (coords, item, block, player) => BackpackRegistry.openGuiFor(item, player));
 
-        Item.registerNoTargetUseFunction(id, function (item, player) {
-            BackpackRegistry.openGuiFor(item, player);
-        });
+        Item.registerNoTargetUseFunction(id,
+            (item, player) => BackpackRegistry.openGuiFor(item, player));
 
         this.prototypes[id] = prototype;
     }
@@ -89,10 +87,10 @@ class BackpackRegistry {
     static setupContainer(proto: IBackpackPrototype, container: ItemContainer) {
         container.setClientContainerTypeName("backpack_api.ui");
 
-        const isValidFunc = proto.isValidItem || function (id, count, data) {
+        const isValidFunc = proto.isValidItem || ((id, count, data) => {
             return !BackpackRegistry.isBackpack(id) &&
                 (proto.items ? BackpackRegistry.isValidFor(id, data, proto.items) : true);
-        };
+        });
 
         container.setGlobalAddTransferPolicy((container, name, id, amount, data) => {
             return isValidFunc(id, amount, data) ? Math.min(amount, Item.getMaxStack(id) - container.getSlot(name).count) : 0;
@@ -264,7 +262,7 @@ EXPORT("BackpackRegistry", BackpackRegistry);
 
 BackpackRegistry.setupClientSide();
 
-Callback.addCallback("ServerPlayerLoaded", function () {
+Callback.addCallback("ServerPlayerLoaded", () => {
     for (let id in BackpackRegistry.prototypes) {
         let prototype = BackpackRegistry.prototypes[id];
         if (!prototype.title) {
