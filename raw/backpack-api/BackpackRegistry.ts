@@ -19,13 +19,11 @@ class BackpackRegistry {
      */
     static register(id: number, prototype: IBackpackPrototype) {
         if (id <= 0) {
-            Logger.Log("id for backpack register function is not valid", "ERROR");
-            return;
+            throw "Invalid item id"
         }
 
         if (!prototype) {
-            Logger.Log("object for backpack register function is not valid", "ERROR");
-            return;
+            throw "Invalid backpack prototype";
         }
 
         prototype.title = prototype.title ?? "Backpack";
@@ -37,8 +35,7 @@ class BackpackRegistry {
         const slots = prototype.slots;
         if (!prototype.gui) {
             if (slots <= 0) {
-                Logger.Log("slots amount is not valid", "ERROR");
-                return;
+                throw "Amount of slots must be greater than zero";
             }
 
             prototype.gui = new UI.StandartWindow({
@@ -204,8 +201,7 @@ class BackpackRegistry {
             return item.data;
         }
 
-        Logger.Log("item is not a backpack", "ERROR");
-        return null;
+        throw "Item is not a backpack";
     };
 
     /**
