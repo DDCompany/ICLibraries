@@ -1,5 +1,4 @@
 module.exports = function (grunt) {
-    const ACHIEVEMENTS_API = "raw/achievements-api/";
     const BACKPACK_API = "raw/backpack-api/";
     const BAUBLES_API = "raw/baubles-api/";
     const COPYRIGHT = "©DDCompany (https://vk.com/forestry_pe)";
@@ -10,24 +9,6 @@ module.exports = function (grunt) {
       - Запрещено явное копирование кода в другие библиотеки или моды
       - Используя библиотеку вы автоматически соглашаетесь с описанными
         выше условиями`;
-
-    function getAchievementsAPIBanner() {
-        return `/*
-        _        _     _                                     _          _    ____ ___
-       / \\   ___| |__ (_) _____   _____ _ __ ___   ___ _ __ | |_ ___   / \\  |  _ \\_ _|
-      / _ \\ / __| '_ \\| |/ _ \\ \\ / / _ \\ '_ \` _ \\ / _ \\ '_ \\| __/ __| / _ \\ | |_) | |
-     / ___ \\ (__| | | | |  __/\\ V /  __/ | | | | |  __/ | | | |_\\__ \\/ ___ \\|  __/| |
-    /_/   \\_\\___|_| |_|_|\\___| \\_/ \\___|_| |_| |_|\\___|_| |_|\\__|___/_/   \\_\\_|  |___|
-
-    AchievementsAPI library
-     
-    ${TERMS_OF_USE}
-             
-    ${COPYRIGHT}
-*/
-
-`;
-    }
 
     function getBackpackAPIBanner() {
         return `/*
@@ -76,10 +57,6 @@ module.exports = function (grunt) {
                 tsconfig: `${BACKPACK_API}tsconfig.json`
             },
 
-            achievementsAPI: {
-                tsconfig: `${ACHIEVEMENTS_API}tsconfig.json`
-            },
-
             baublesAPI: {
                 tsconfig: `${BAUBLES_API}tsconfig.json`
             }
@@ -99,11 +76,6 @@ module.exports = function (grunt) {
                     done();
                 },
 
-                [`${ACHIEVEMENTS_API}banner.ts`]: function (fs, dist, done) {
-                    fs.writeSync(dist, getAchievementsAPIBanner());
-                    done();
-                },
-
                 [`${BAUBLES_API}banner.ts`]: function (fs, dist, done) {
                     fs.writeSync(dist, getBaublesAPIBanner());
                     done();
@@ -116,7 +88,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-move');
     grunt.loadNpmTasks('grunt-file-creator');
     grunt.registerTask('generateBanners', ['file-creator:generateBanners']);
-    grunt.registerTask('achievements-api', ['ts:achievementsAPI', 'move:declarations']);
     grunt.registerTask('backpack-api', ['ts:backpackAPI', 'move:declarations']);
     grunt.registerTask('baubles-api', ['ts:baublesAPI', 'move:declarations']);
     grunt.registerTask('tests', ['ts:tests']);
