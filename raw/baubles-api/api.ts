@@ -23,7 +23,7 @@ class Baubles {
         }
 
         if (!obj.onTakeOff) {
-            obj.onEquip = () => {
+            obj.onTakeOff = () => {
             };
         }
 
@@ -64,7 +64,8 @@ class Baubles {
 
             container.setSlotAddTransferPolicy(name, (container, name, id, amount) => {
                 const baubleType = name === "ring0" || name === "ring1" ? "ring" : name;
-                return Baubles.getType(id) === baubleType ? Math.min(amount, Item.getMaxStack(id) - container.getSlot(name).count) : 0;
+                return Baubles.getType(id) === baubleType ?
+                    Math.min(amount, Item.getMaxStack(id) - container.getSlot(name).count) : 0;
             });
         }
 
@@ -77,7 +78,7 @@ class Baubles {
         if (!bauble) {
             bauble = this.data[uid] = {
                 container: this.setupContainer(client.getPlayerUid()),
-                cache: {}
+                cache: {},
             };
         }
 
