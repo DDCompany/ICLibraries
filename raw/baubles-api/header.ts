@@ -1,8 +1,8 @@
 LIBRARY({
     name: "BaublesAPI",
-    version: 1,
+    version: 2,
     shared: true,
-    api: "CoreEngine"
+    api: "CoreEngine",
 });
 
 const LOG_TAG = "BAUBLES-API";

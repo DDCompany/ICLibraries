@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ICService">
+    <option name="dir" value="ICLibs" />
+    <option name="lastPath" value="$PROJECT_DIR$" />
+    <option name="launcherType" value="HORIZON" />
+    <option name="pushBlackList">
+      <list>
+        <option value="$PROJECT_DIR$/raw" />
+        <option value="$PROJECT_DIR$/node_modules" />
+        <option value="$PROJECT_DIR$/.git" />
+        <option value="$PROJECT_DIR$/.idea" />
+        <option value="$PROJECT_DIR$/dev" />
+      </list>
+    </option>
+    <option name="serial" value="bdbe651" />
+  </component>
+</project>
