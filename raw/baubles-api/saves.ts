@@ -9,7 +9,11 @@ Saver.addSavesScope("Baubles",
             Logger.Log("Old saves detected. Converting...", LOG_TAG);
             // @ts-ignore
             const container: UI.Container = scope.container;
-            const cache: { [key: string]: number } = {};
+            if (!container) {
+                return;
+            }
+
+            const cache: { [key: string]: number; } = {};
             const slots = container.slots;
             for (let slotName in slots) {
                 cache[slotName] = slots[slotName].id;
@@ -19,8 +23,8 @@ Saver.addSavesScope("Baubles",
                 [Player.get()]: {
                     // @ts-ignore
                     container: new ItemContainer(scope.container),
-                    cache: cache
-                }
+                    cache: cache,
+                },
             };
             return;
         }
@@ -33,5 +37,5 @@ Saver.addSavesScope("Baubles",
     },
     () => {
         return {data: Baubles.data, _format: 1};
-    }
+    },
 );
