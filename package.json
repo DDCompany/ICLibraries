@@ -1,6 +1,8 @@
 {
   "name": "ic-libraries",
   "devDependencies": {
+    "@types/figlet": "^1.5.4",
+    "figlet": "^1.5.2",
     "grunt": "^1.4.1",
     "grunt-cli": "^1.4.3",
     "grunt-contrib-concat": "^1.0.1",
