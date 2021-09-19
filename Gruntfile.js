@@ -5,10 +5,20 @@ module.exports = function (grunt) {
         {
             title: "BackpackAPI",
             id: "backpack-api",
+            links: {
+                "Docs": "https://wiki.mineprogramming.org/index.php/InnerCore/Libs/BackpackAPI",
+                "Github Repository": "https://github.com/DDCompany/ICLibraries/tree/master/raw/backpack-api",
+                "Issues Tracker": "https://github.com/DDCompany/ICLibraries/issues",
+            },
         },
         {
             title: "BaublesAPI",
             id: "baubles-api",
+            links: {
+                "Docs": "https://wiki.mineprogramming.org/index.php/InnerCore/Libs/Baubles",
+                "Github Repository": "https://github.com/DDCompany/ICLibraries/tree/master/raw/baubles-api",
+                "Issues Tracker": "https://github.com/DDCompany/ICLibraries/issues",
+            },
         },
     ];
 
@@ -22,15 +32,15 @@ module.exports = function (grunt) {
 
     function generateBannerFor(mod) {
         return `/*
-        
 ${figlet.textSync(mod.title).split("\n").filter(line => line.trim()).map(line => `  ${line}`).join("\n")}
-    
+${mod.links ? "\n" + Object.entries(mod.links).map((entry) => `    ${entry[0]}: ${entry[1]}`).join("\n") : ""}
+
     Terms of use:
      - Forbidden to distribute the library on third-party sources
        without links to the official group (https://vk.com/forestry_pe)
      - Forbidden to change the code of this library
      - Using the mod you automatically agree to the conditions described above
-           
+
     ©DDCompany (https://vk.com/forestry_pe) 
 */
 
