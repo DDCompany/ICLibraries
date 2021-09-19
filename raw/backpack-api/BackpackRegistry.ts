@@ -1,3 +1,14 @@
+const BackpackUseFunction: Callback.ItemUseLocalFunction = (coords, item, block, player) =>
+    BackpackNotTargetUseFunction(item, player);
+
+const BackpackNotTargetUseFunction: Callback.ItemUseNoTargetFunction = (item, player) => {
+    if (Entity.getSneaking(player)) {
+        return;
+    }
+
+    BackpackRegistry.openGuiFor(item, player);
+};
+
 class BackpackRegistry {
     /**
      * Next unique backpack identifier.
@@ -70,11 +81,8 @@ class BackpackRegistry {
             BackpackRegistry.addSlotsToGui(prototype.gui, slots, prototype.inRow, prototype.slotsCenter);
         }
 
-        Item.registerUseFunctionForID(id,
-            (coords, item, block, player) => BackpackRegistry.openGuiFor(item, player));
-
-        Item.registerNoTargetUseFunction(id,
-            (item, player) => BackpackRegistry.openGuiFor(item, player));
+        Item.registerUseFunctionForID(id, BackpackUseFunction);
+        Item.registerNoTargetUseFunction(id, BackpackNotTargetUseFunction);
 
         this.prototypes[id] = prototype;
     }
