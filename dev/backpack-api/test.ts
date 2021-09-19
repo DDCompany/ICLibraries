@@ -38,4 +38,19 @@ BackpackRegistry.register(ItemID.backpackTest2, {
     inRow: 1,
 });
 
+//3
+IDRegistry.genItemID("backpackTest3");
+Item.createItem("backpackTest3", "Test Simple Backpack #3", {name: "backpack", meta: 0}, {stack: 1});
+Item.setToolRender(ItemID.backpackTest3, true);
+Item.setGlint(ItemID.backpackTest3, true);
+setNameWithData(ItemID.backpackTest3);
+
+BackpackRegistry.register(ItemID.backpackTest3, {
+    extend: ItemID.backpackTest,
+    kind: BackpackKind.EXTRA,
+    items: [
+        VanillaBlockID.iron_ore,
+    ],
+});
+
 Translation.addTranslation("Test Backpack", {ru: "Тестовый Рюкзак"});

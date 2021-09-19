@@ -11,12 +11,12 @@ type T_ValidationFunc = (id: number, count: number, data: number) => boolean;
  * Object representing properties of the backpack
  */
 interface IBackpackPrototype {
-    useExtraData?: boolean
+    useExtraData?: boolean;
     /**
      * Specify where backpack id is stored.
      * @default <i>BackpackKind.META</i>
      */
-    kind?: BackpackKind
+    kind?: BackpackKind;
     /**
      * Backpack title.
      */
@@ -50,7 +50,15 @@ interface IBackpackPrototype {
      */
     isValidItem?: T_ValidationFunc;
     /**
+     * Extends items from other backpack with the specified id. Only one level of extension allowed
+     */
+    extend?: number;
+    /**
      * GUI of the backpack.
      */
-    gui?: UI.Window | UI.WindowGroup
+    gui?: UI.Window | UI.WindowGroup;
+}
+
+interface IRegisteredBackpackPrototype extends IBackpackPrototype {
+    extendItems?: T_BackpackItem[];
 }

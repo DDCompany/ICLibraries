@@ -10,27 +10,37 @@ class BackpackRegistry {
     /**
      * Object that store prototypes of backpacks. Key is backpack id.
      */
-    static prototypes: { [key: number]: IBackpackPrototype } = {};
+    static prototypes: { [key: number]: IRegisteredBackpackPrototype } = {};
 
     /**
      * Backpack registration function.
      * @param id - item id
-     * @param prototype - object representing properties of the backpack
+     * @param _prototype - object representing properties of the backpack
      */
-    static register(id: number, prototype: IBackpackPrototype) {
+    static register(id: number, _prototype: IBackpackPrototype) {
         if (id <= 0) {
             throw new Error("Invalid item id");
         }
 
-        if (!prototype) {
+        if (!_prototype) {
             throw new Error("Invalid backpack prototype");
         }
 
+        const prototype: IRegisteredBackpackPrototype = _prototype;
         prototype.title = prototype.title ?? "Backpack";
         prototype.kind = prototype.useExtraData ? BackpackKind.EXTRA : (prototype.kind ?? BackpackKind.META);
         prototype.slots = prototype.slots ?? 10;
         prototype.inRow = prototype.inRow ?? prototype.slots;
         prototype.slotsCenter = prototype.slotsCenter ?? true;
+
+        if (prototype.extend) {
+            const parentPrototype = BackpackRegistry.prototypes[prototype.extend];
+            if (!parentPrototype) {
+                throw new Error("Items cannot be extended because no prototype backpack was not found");
+            }
+
+            prototype.extendItems = parentPrototype.items;
+        }
 
         const slots = prototype.slots;
         if (!prototype.gui) {
@@ -74,10 +84,19 @@ class BackpackRegistry {
             (container, name) => this.prototypes[Network.serverToLocalId(parseInt(name))]?.gui);
     }
 
-    static setupContainer(proto: IBackpackPrototype, container: ItemContainer) {
-        const isValidFunc = proto.isValidItem || ((id, count, data) =>
-            !BackpackRegistry.isBackpack(id)
-            && (proto.items ? BackpackRegistry.isValidFor(id, data, proto.items) : true));
+    static setupContainer(proto: IRegisteredBackpackPrototype, container: ItemContainer) {
+        const isValidFunc = proto.isValidItem || ((id, count, data) => {
+            if (BackpackRegistry.isBackpack(id)) {
+                return false;
+            }
+
+            if (proto.extendItems) {
+                return BackpackRegistry.isValidFor(id, data, proto.extendItems) ||
+                    (proto.items ? BackpackRegistry.isValidFor(id, data, proto.items) : false);
+            }
+
+            return proto.items ? BackpackRegistry.isValidFor(id, data, proto.items) : true;
+        });
 
         container.setClientContainerTypeName("backpack_api.ui");
         container.setGlobalAddTransferPolicy((container, name, id, amount, data) =>
