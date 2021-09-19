@@ -19,11 +19,11 @@ class BackpackRegistry {
      */
     static register(id: number, prototype: IBackpackPrototype) {
         if (id <= 0) {
-            throw "Invalid item id"
+            throw new Error("Invalid item id")
         }
 
         if (!prototype) {
-            throw "Invalid backpack prototype";
+            throw new Error("Invalid backpack prototype");
         }
 
         prototype.title = prototype.title ?? "Backpack";
@@ -35,7 +35,7 @@ class BackpackRegistry {
         const slots = prototype.slots;
         if (!prototype.gui) {
             if (slots <= 0) {
-                throw "Amount of slots must be greater than zero";
+                throw new Error("Amount of slots must be greater than zero");
             }
 
             prototype.gui = new UI.StandartWindow({
@@ -201,7 +201,7 @@ class BackpackRegistry {
             return item.data;
         }
 
-        throw "Item is not a backpack";
+        throw new Error("Item is not a backpack");
     };
 
     /**
