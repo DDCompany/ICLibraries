@@ -44,7 +44,7 @@ ${figlet.textSync(mod.title).split("\n").map(line => `  ${line}`).join("\n")}
     grunt.initConfig({
         ts: (() => {
             const tasks = {
-                dev: {
+                examples: {
                     tsconfig: "dev/tsconfig.json"
                 },
             };
@@ -85,5 +85,5 @@ ${figlet.textSync(mod.title).split("\n").map(line => `  ${line}`).join("\n")}
         grunt.registerTask(`build-${id}`, [`file-creator:gen-banner-for-${id}`, `ts:${id}`, "move:declarations"]);
     }
 
-    grunt.registerTask("build-dev", [...mods.map(({id}) => `build-${id}`), "ts:dev"]);
+    grunt.registerTask("build-examples", [...mods.map(({id}) => `build-${id}`), "ts:examples"]);
 };
