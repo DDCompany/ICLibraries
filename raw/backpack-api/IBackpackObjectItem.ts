@@ -1,7 +1,8 @@
-type T_BackpackItem = IBackpackObjectItem | number | string;
+type T_BackpackItem = IBackpackObjectItem | [string | number, string | number] | number | string;
 
 /**
  * Object representing the item or group of items that can be stored in backpack
+ * @deprecated use [id, data] syntax instead
  */
 interface IBackpackObjectItem {
     /**

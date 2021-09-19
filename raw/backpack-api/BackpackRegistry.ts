@@ -19,7 +19,7 @@ class BackpackRegistry {
      */
     static register(id: number, prototype: IBackpackPrototype) {
         if (id <= 0) {
-            throw new Error("Invalid item id")
+            throw new Error("Invalid item id");
         }
 
         if (!prototype) {
@@ -42,19 +42,19 @@ class BackpackRegistry {
                 standart: {
                     header: {
                         text: {
-                            text: ""
-                        }
+                            text: "",
+                        },
                     },
                     inventory: {
-                        standart: true
+                        standart: true,
                     },
                     background: {
-                        standart: true
+                        standart: true,
                     },
-                    minHeight: 90 + (slots / 10 * 61) + 70
+                    minHeight: 90 + (slots / 10 * 61) + 70,
                 },
                 drawing: [],
-                elements: {}
+                elements: {},
             });
 
             BackpackRegistry.addSlotsToGui(prototype.gui, slots, prototype.inRow, prototype.slotsCenter);
@@ -100,9 +100,17 @@ class BackpackRegistry {
                     }
                     break;
                 case "object":
-                    const rId = item.id;
-                    const rData = item.data ?? 0;
+                    let rId: number | string;
+                    let rData: number | string;
                     let isOk = true;
+
+                    if (Array.isArray(item)) {
+                        rId = item[0];
+                        rData = item[1] ?? 0;
+                    } else {
+                        rId = item.id;
+                        rData = item.data ?? 0;
+                    }
 
                     switch (typeof rId) {
                         case "string":
@@ -236,7 +244,7 @@ class BackpackRegistry {
             content.elements["slot" + (i + 1)] = {
                 type: "slot",
                 x: x + i % inRow * 61,
-                y: y + Math.floor(i / inRow) * 61
+                y: y + Math.floor(i / inRow) * 61,
             };
         }
 

@@ -16,12 +16,11 @@ setNameWithData(ItemID.backpackTest);
 BackpackRegistry.register(ItemID.backpackTest, {
     title: "Test Backpack",
     items: [
-        "ore.*", //Any ore
-        {id: VanillaBlockID.wool, data: -1}, //Any wool
-        {id: "ingot.*"}, //Any ingot
-        {id: VanillaBlockID.planks}, //Oak planks
-        {id: VanillaBlockID.concrete, data: -1} //Any concrete
-    ]
+        "ore.*", //Any modded ore
+        "ingot.*", //Any modded ingot
+        VanillaBlockID.concrete, //Any concrete
+        [VanillaBlockID.planks, 0], //Oak planks
+    ],
 });
 
 //2
@@ -32,11 +31,11 @@ Item.setGlint(ItemID.backpackTest2, true);
 setNameWithData(ItemID.backpackTest2);
 
 BackpackRegistry.register(ItemID.backpackTest2, {
-    //Any item, because 'items' is undefined
+    //Any item, because 'items' field is undefined
     kind: BackpackKind.EXTRA,
     slots: 3,
     slotsCenter: true,
-    inRow: 1
+    inRow: 1,
 });
 
 Translation.addTranslation("Test Backpack", {ru: "Тестовый Рюкзак"});
