@@ -4,12 +4,12 @@ module.exports = function (grunt) {
     const mods = [
         {
             title: "BackpackAPI",
-            id: "backpack-api"
+            id: "backpack-api",
         },
         {
             title: "BaublesAPI",
-            id: "baubles-api"
-        }
+            id: "baubles-api",
+        },
     ];
 
     for (const mod of mods) {
@@ -23,17 +23,13 @@ module.exports = function (grunt) {
     function generateBannerFor(mod) {
         return `/*
         
-${figlet.textSync(mod.title).split("\n").map(line => `  ${line}`).join("\n")}
-                                         
-    ${mod.title} library
-     
-    Условия использования:
-      - Запрещено распространение библиотеки на сторонних источниках
-        без ссылки на официальное сообщество(https://vk.com/forestry_pe)
-      - Запрещено изменение кода библиотеки
-      - Запрещено явное копирование кода в другие библиотеки или моды
-      - Используя библиотеку вы автоматически соглашаетесь с описанными
-        выше условиями
+${figlet.textSync(mod.title).split("\n").filter(line => line.trim()).map(line => `  ${line}`).join("\n")}
+    
+    Terms of use:
+     - Forbidden to distribute the library on third-party sources
+       without links to the official group (https://vk.com/forestry_pe)
+     - Forbidden to change the code of this library
+     - Using the mod you automatically agree to the conditions described above
            
     ©DDCompany (https://vk.com/forestry_pe) 
 */
@@ -45,13 +41,13 @@ ${figlet.textSync(mod.title).split("\n").map(line => `  ${line}`).join("\n")}
         ts: (() => {
             const tasks = {
                 examples: {
-                    tsconfig: "dev/tsconfig.json"
+                    tsconfig: "dev/tsconfig.json",
                 },
             };
             for (const {id, dir} of mods) {
                 tasks[id] = {
-                    tsconfig: `${dir}tsconfig.json`
-                }
+                    tsconfig: `${dir}tsconfig.json`,
+                };
             }
             return tasks;
         })(),
@@ -59,8 +55,8 @@ ${figlet.textSync(mod.title).split("\n").map(line => `  ${line}`).join("\n")}
         move: {
             declarations: {
                 src: "libs/*.d.ts",
-                dest: "dev/declarations/"
-            }
+                dest: "dev/declarations/",
+            },
         },
 
         "file-creator": (() => {
@@ -70,8 +66,8 @@ ${figlet.textSync(mod.title).split("\n").map(line => `  ${line}`).join("\n")}
                     [`${mod.dir}banner.ts`](fs, dist, done) {
                         fs.writeSync(dist, generateBannerFor(mod));
                         done();
-                    }
-                }
+                    },
+                };
             }
             return tasks;
         })(),
