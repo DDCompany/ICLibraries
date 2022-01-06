@@ -72,7 +72,7 @@ class Baubles {
         return container;
     }
 
-    static getContainer(client: ConnectedClient) {
+    static getContainer(client: NetworkClient) {
         const uid = client.getPlayerUid();
         let bauble = this.data[uid];
         if (!bauble) {
@@ -105,7 +105,7 @@ class Baubles {
         Network.sendToServer("baubles.open_ui", {});
     }
 
-    static openGuiFor(client: ConnectedClient) {
+    static openGuiFor(client: NetworkClient) {
         Baubles.getContainer(client)
             .openFor(client, "main");
     }
