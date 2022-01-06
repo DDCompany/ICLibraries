@@ -59,20 +59,20 @@ class BackpackRegistry {
                 throw new Error("Amount of slots must be greater than zero");
             }
 
-            prototype.gui = new UI.StandartWindow({
-                standart: {
+            prototype.gui = new UI.StandardWindow({
+                standard: {
                     header: {
                         text: {
                             text: "",
                         },
                     },
                     inventory: {
-                        standart: true,
+                        standard: true,
                     },
                     background: {
-                        standart: true,
+                        standard: true,
                     },
-                    minHeight: 90 + (slots / 10 * 61) + 70,
+                    minHeight: 20 + (slots / prototype.inRow * 91) + 70,
                 },
                 drawing: [],
                 elements: {},
@@ -262,16 +262,20 @@ class BackpackRegistry {
                          slots: number,
                          inRow: number,
                          center: boolean,
-                         x = 345,
-                         y = 70) {
+                         x = 0,
+                         y = 0) {
         const content = gui.getContent();
-        x = center ? 300 + (700 - inRow * 61) / 2 : x;
+        const slotSize = 90;
+        const slotPadding = 1;
+        const slotFullSize = slotSize + slotPadding;
+        x = center ? 20 + (1000 - inRow * slotFullSize) / 2 : x;
 
         for (let i = 0; i < slots; i++) {
             content.elements["slot" + (i + 1)] = {
                 type: "slot",
-                x: x + i % inRow * 61,
-                y: y + Math.floor(i / inRow) * 61,
+                size: slotSize,
+                x: x + i % inRow * slotFullSize,
+                y: y + Math.floor(i / inRow) * slotFullSize,
             };
         }
 

@@ -33,9 +33,9 @@ setNameWithData(ItemID.backpackTest2);
 BackpackRegistry.register(ItemID.backpackTest2, {
     //Any item, because 'items' field is undefined
     kind: BackpackKind.EXTRA,
-    slots: 3,
+    slots: 100,
     slotsCenter: true,
-    inRow: 1,
+    inRow: 5,
 });
 
 //3
