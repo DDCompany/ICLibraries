@@ -52,12 +52,13 @@ class Baubles {
             container.setDirtySlotListener(name, (container, name, slot) => {
                 const data = Baubles.data[playerUid];
                 const old = data.cache[name];
-                if (!old && slot.id > 0 || slot.id !== old) {
+                if ((!old && slot.id !== 0) || slot.id !== old) {
                     const client = Network.getClientForPlayer(playerUid);
                     if (old) {
-                        Baubles.getDesc(old.id)?.onTakeOff(client, data.container, name);
-                    }
-                    Baubles.getDesc(slot.id)?.onEquip(client, data.container, name);
+                        Baubles.getDesc(old)?.onTakeOff(client, data.container, name);
+                    }else{
+                        Baubles.getDesc(slot.id)?.onEquip(client, data.container, name);
+                    };
                     data.cache[name] = slot.id;
                 }
             });
@@ -141,7 +142,7 @@ Callback.addCallback("tick", () => Baubles.tick());
 Callback.addCallback("LevelLeft", () => Baubles.reset());
 
 Callback.addCallback("EntityDeath", (entity: number) => {
-    if (Entity.getType(entity) === 1) { //player
+    if (Entity.getType(entity) === 63) { //player
         const data = Baubles.getDataFor(entity);
         if (!data) {
             return;
@@ -156,7 +157,7 @@ Callback.addCallback("EntityDeath", (entity: number) => {
         const blockSource = BlockSource.getDefaultForActor(entity);
         const container = data.container;
         for (let i in data.cache) {
-            const bauble = data.cache[i];
+            const bauble = Baubles.descriptions[data.cache[i]];
             if (bauble.onTakeOff) {
                 bauble.onTakeOff(client, data.container, i);
             }
