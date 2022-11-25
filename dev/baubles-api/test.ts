@@ -7,15 +7,18 @@ Item.setGlint(ItemID.baubleOfWind, true);
 Baubles.registerBauble({
     id: ItemID.baubleOfWind,
     type: BaubleType.ring,
+
     onEquip(client) {
-        alert("onEquip " + client.getPlayerUid());
-        Logger.Log(client.getPlayerUid() + "", "ERROR");
+        Debug.message("onEquip " + client.getPlayerUid());
+        Debug.message(client.getPlayerUid() + "");
         client.send("baubles_test.wind_ring", {equip: true});
     },
+
     onTakeOff(client) {
-        alert("onTakeOff");
+        Debug.message("onTakeOff");
         client.send("baubles_test.wind_ring", {equip: false});
     },
+
     tick() {
 
     }

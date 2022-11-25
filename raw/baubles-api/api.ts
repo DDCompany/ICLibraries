@@ -51,13 +51,19 @@ class Baubles {
         for (const name of slots) {
             container.setDirtySlotListener(name, (container, name, slot) => {
                 const data = Baubles.data[playerUid];
-                const old = data.cache[name];
-                if (!old && slot.id > 0 || slot.id !== old) {
+                const cachedId = data.cache[name];
+                if (cachedId !== slot.id) { //If bauble was changed
                     const client = Network.getClientForPlayer(playerUid);
-                    if (old) {
-                        Baubles.getDesc(old.id)?.onTakeOff(client, data.container, name);
+                    if (cachedId > 0) {
+                        const cachedBauble = Baubles.getDesc(cachedId);
+                        cachedBauble?.onTakeOff(client, container, name);
                     }
-                    Baubles.getDesc(slot.id)?.onEquip(client, data.container, name);
+
+                    if (slot.id > 0) {
+                        const bauble = Baubles.getDesc(slot.id);
+                        bauble?.onEquip(client, container, name);
+                    }
+
                     data.cache[name] = slot.id;
                 }
             });
@@ -115,7 +121,7 @@ class Baubles {
     }
 
     static getType(id: number): BaubleType {
-        let desc = this.descriptions[id];
+        const desc = this.descriptions[id];
 
         if (!desc) {
             return null;
@@ -141,7 +147,7 @@ Callback.addCallback("tick", () => Baubles.tick());
 Callback.addCallback("LevelLeft", () => Baubles.reset());
 
 Callback.addCallback("EntityDeath", (entity: number) => {
-    if (Entity.getType(entity) === 1) { //player
+    if (Entity.getType(entity) === EEntityType.PLAYER) {
         const data = Baubles.getDataFor(entity);
         if (!data) {
             return;
@@ -155,11 +161,9 @@ Callback.addCallback("EntityDeath", (entity: number) => {
         const pos = Entity.getPosition(entity);
         const blockSource = BlockSource.getDefaultForActor(entity);
         const container = data.container;
-        for (let i in data.cache) {
-            const bauble = data.cache[i];
-            if (bauble.onTakeOff) {
-                bauble.onTakeOff(client, data.container, i);
-            }
+        for (const i in data.cache) {
+            const bauble = Baubles.getDesc(data.cache[i]);
+            bauble?.onTakeOff(client, data.container, i);
             container.dropSlot(blockSource, i, pos.x, pos.y, pos.z);
         }
     }
@@ -177,7 +181,7 @@ Callback.addCallback("ServerPlayerLoaded", (player: number) => {
     }
 
     const cache = data.cache;
-    for (let slot in cache) {
+    for (const slot in cache) {
         const desc = Baubles.getDesc(cache[slot]);
         if (!desc) {
             continue;
